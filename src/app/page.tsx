@@ -1,3 +1,5 @@
+import { ThemeModeToggleButton } from "@/components/theme/theme-mode-toggle-button";
+import { Button } from "@/components/ui/button";
 import {
   SignedIn,
   SignedOut,
@@ -8,16 +10,23 @@ import {
 
 export default function HomePage() {
   return (
-    <div>
-      <SignedOut>
-        <SignInButton mode="modal">
-          <button className="bg-red-700">Sign In</button>
-        </SignInButton>
-        <SignUpButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+    <div className="m-2">
+      <div className="flex justify-between gap-10">
+        <ThemeModeToggleButton />
+        <div className="flex gap-2">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button variant="default">Sign In</Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button variant="secondary">Sign Up</Button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </div>
     </div>
   );
 }
