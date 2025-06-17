@@ -3,8 +3,8 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
 import { useCallback } from "react";
+import { Button } from "../ui/button/button";
 
 export function ThemeModeToggleButton() {
   const { theme, setTheme } = useTheme();

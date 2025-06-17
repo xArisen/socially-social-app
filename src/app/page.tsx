@@ -1,5 +1,5 @@
 import { ThemeModeToggleButton } from "@/components/theme/theme-mode-toggle-button";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import {
   SignedIn,
   SignedOut,
