@@ -2,10 +2,12 @@ import { ThemeModeToggleButton } from "@/components/theme/theme-mode-toggle-butt
 import { Button } from "@/components/ui/button/button";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
-import { BellIcon, HomeIcon, Link, UserIcon } from "lucide-react";
+import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
+import Link from "next/link";
 
 export async function NavbarDesktop() {
   const user = await currentUser();
+
   return (
     <div className="hidden md:flex items-center space-x-4">
       <ThemeModeToggleButton />
@@ -19,7 +21,6 @@ export async function NavbarDesktop() {
 
       {user ? (
         <>
-          {/* TODO: Now showing up text and icons? 40:10 */}
           <Button variant="ghost" className="flex items-center gap-2" asChild>
             <Link href="/notifications">
               <BellIcon className="w-4 h-4" />

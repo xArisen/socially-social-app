@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NavbarDesktop } from "./navbar-desktop";
+import { NavbarMobile } from "./navbar-mobile";
 
 export function Navbar() {
   return (
@@ -16,7 +17,7 @@ export function Navbar() {
           </div>
 
           <NavbarDesktop />
-          {/* <NavbarMobile /> */}
+          <NavbarMobile />
         </div>
       </div>
     </nav>
