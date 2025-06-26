@@ -9,8 +9,10 @@
     "lint": "next lint",
     "format:prettier-check": "prettier . --check",
     "format:type-check": "tsc --noEmit",
+    "format:prisma": "pnpx prisma format",
     "check": "pnpm run lint && pnpm run format:prettier-check && pnpm run format:type-check",
-    "format": "prettier . --write && next lint --fix"
+    "format": "prettier . --write && next lint --fix",
+    "format-all": "prettier . --write && next lint --fix && pnpm run format:prisma"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.22.0",
