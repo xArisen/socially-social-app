@@ -10,3 +10,5 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
+
+// TODO: Add protected routes and API endpoints protection (and to server actions?)
