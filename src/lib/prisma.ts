@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma";
 
 declare const globalThis: {
   prismaGlobal: PrismaClient;
@@ -6,8 +6,8 @@ declare const globalThis: {
 
 const prisma: PrismaClient = globalThis.prismaGlobal ?? new PrismaClient();
 
-export default prisma;
-
 if (process.env.NODE_ENV !== "production") {
   globalThis.prismaGlobal = prisma;
 }
+
+export default prisma;

@@ -1,6 +1,38 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export default clerkMiddleware();
+// // TODO: Add protected routes and API endpoints protection (and to server actions?)
+
+// TODO: Extract all routes to path.ts
+const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
+const isPublicRoute = createRouteMatcher(["/"]);
+
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  const { isAuthenticated, sessionClaims } = await auth();
+
+  // If the user isn't signed in and the route is private, redirect to the homepage
+  if (!isAuthenticated && !isPublicRoute(req)) {
+    const homeUrl = new URL("/", req.url);
+    return NextResponse.redirect(homeUrl);
+  }
+
+  // For users visiting /onboarding, don't try to redirect
+  if (isAuthenticated && isOnboardingRoute(req)) {
+    return NextResponse.next();
+  }
+
+  // Catch users who do not have `onboardingComplete: true` in their publicMetadata
+  // Redirect them to the /onboarding route to complete onboarding
+  if (isAuthenticated && !sessionClaims?.metadata?.onboardingComplete) {
+    const onboardingUrl = new URL("/onboarding", req.url);
+    return NextResponse.redirect(onboardingUrl);
+  }
+
+  // If the user is logged in and the route is protected, let them view.
+  if (isAuthenticated && !isPublicRoute(req)) {
+    return NextResponse.next();
+  }
+});
 
 export const config = {
   matcher: [
@@ -10,5 +42,3 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
-
-// TODO: Add protected routes and API endpoints protection (and to server actions?)

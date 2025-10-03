@@ -16,6 +16,23 @@ const eslintConfig = [
 eslintConfig.push({
   rules: {
     curly: ["error", "all"],
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            name: "next/navigation",
+            importNames: ["useRouter"],
+            message: "Use the project hook useRouter.",
+          },
+        ],
+      },
+    ],
+    "no-unused-vars": [
+      "error",
+      { args: "after-used", argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+    ],
+    eqeqeq: ["error", "always"],
   },
 });
 
