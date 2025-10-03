@@ -1,4 +1,5 @@
 import { createUser } from "@/actions";
+import { paths } from "@/lib/constants";
 import { isNotNullable, isNullable } from "@/lib/utils/type-guards.utils";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -12,7 +13,7 @@ export default async function RootLayout({
   const isOnboardingComplete =
     sessionClaims?.metadata.onboardingComplete === true;
   if (isNullable(userId) || (isNotNullable(userId) && isOnboardingComplete)) {
-    redirect("/");
+    redirect(paths.HOME);
   } else if (!isOnboardingComplete) {
     await createUser();
   }

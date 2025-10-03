@@ -8,6 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet/sheet";
+import { paths } from "@/lib/constants";
 import { SignInButton, SignOutButton, useAuth } from "@clerk/nextjs";
 import {
   BellIcon,
@@ -56,7 +57,7 @@ export function NavbarMobile() {
               className="flex items-center gap-3 justify-start"
               asChild
             >
-              <Link href="/">
+              <Link href={paths.HOME}>
                 <HomeIcon className="w-4 h-4" />
                 Home
               </Link>
@@ -69,7 +70,7 @@ export function NavbarMobile() {
                   className="flex items-center gap-3 justify-start"
                   asChild
                 >
-                  <Link href="/notifications">
+                  <Link href={paths.NOTIFICATIONS}>
                     <BellIcon className="w-4 h-4" />
                     Notifications
                   </Link>
@@ -79,7 +80,7 @@ export function NavbarMobile() {
                   className="flex items-center gap-3 justify-start"
                   asChild
                 >
-                  <Link href="/profile">
+                  <Link href={paths.PROFILE}>
                     <UserIcon className="w-4 h-4" />
                     Profile
                   </Link>

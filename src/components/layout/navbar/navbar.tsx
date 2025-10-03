@@ -1,3 +1,4 @@
+import { paths } from "@/lib/constants";
 import Link from "next/link";
 import { NavbarDesktop } from "./navbar-desktop";
 import { NavbarMobile } from "./navbar-mobile";
@@ -9,7 +10,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link
-              href="/"
+              href={paths.HOME}
               className="text-xl font-bold text-primary font-mono tracking-wider"
             >
               Socially
