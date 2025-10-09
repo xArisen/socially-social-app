@@ -1,16 +1,18 @@
 "use client";
 
-import { updateUser } from "@/actions";
-import { paths } from "@/lib/constants";
-import { useRouter } from "next/router";
+import { completeUserOnboarding } from "@/actions";
+import { useRouter } from "@/lib/utils";
+import { useAuth } from "@clerk/nextjs";
 
 export function useOnboardingPage() {
   const router = useRouter();
+  const { getToken } = useAuth();
 
   const handleSubmit = async () => {
-    const res = await updateUser();
+    const res = await completeUserOnboarding();
     if (res?.message) {
-      router.push(paths.HOME);
+      await getToken({ skipCache: true });
+      router.refresh();
     }
   };
 

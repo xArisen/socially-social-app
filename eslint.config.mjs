@@ -33,6 +33,7 @@ eslintConfig.push({
       { args: "after-used", argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
     ],
     eqeqeq: ["error", "always"],
+    "no-console": ["warn", { allow: ["warn", "error", "info"] }],
   },
 });
 

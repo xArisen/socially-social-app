@@ -1,66 +1,79 @@
 "use server";
 
+import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import prisma from "@/lib/prisma";
-import { isNullable } from "@/lib/utils/type-guards.utils";
-import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { isNotEmpty, isNullable } from "@/lib/utils/type-guards.utils";
+import {
+  auth,
+  clerkClient,
+  currentUser,
+  type EmailAddress,
+} from "@clerk/nextjs/server";
 
-// TODO: Add global function which collect throwed error and by deafaul shows toast with message.
+// TODO: Add a global error handler that captures thrown errors and shows a toast by default.
 
 export async function createUser() {
+  const { userId } = await auth();
+  const user = await currentUser();
+
+  if (isNullable(userId)) {
+    throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
+  }
+
+  if (isNullable(user)) {
+    throw new Error(ERROR_MESSAGES.AUTH.USER_NOT_FOUND);
+  }
+
+  const primaryEmail = user.emailAddresses[0];
+
+  if (!isNotEmpty<EmailAddress>(primaryEmail)) {
+    throw new Error(ERROR_MESSAGES.AUTH.EMAIL_NOT_FOUND);
+  }
+
   try {
-    const { userId } = await auth();
-    const user = await currentUser();
-
-    if (isNullable(user) || isNullable(userId)) {
-      // TODO: throw error
-      return;
-    }
-
     const existingUser = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
+      where: { clerkId: userId },
     });
 
     if (existingUser) {
       return existingUser;
     }
 
-    const dbUser = await prisma.user.create({
+    return await prisma.user.create({
       data: {
         clerkId: userId,
-        name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
-        username:
-          user.username ?? user.emailAddresses[0].emailAddress.split("@")[0],
-        email: user.emailAddresses[0].emailAddress,
+        name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim(),
+        username: user.username ?? primaryEmail.emailAddress.split("@")[0],
+        email: primaryEmail.emailAddress,
         image: user.imageUrl,
       },
     });
-
-    return dbUser;
   } catch (error) {
-    // TODO: throw error
+    throw new Error(ERROR_MESSAGES.USER.CREATE_FAILED, { cause: error });
   }
 }
 
-export async function updateUser() {
-  const { userId } = await auth();
-  const client = await clerkClient();
+export async function completeUserOnboarding() {
+  const { userId, sessionId } = await auth();
 
-  if (isNullable(userId)) {
-    // TODO: throw error
-    return;
+  if (isNullable(userId) || isNullable(sessionId)) {
+    throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
 
   try {
-    const res = await client.users.updateUser(userId, {
-      publicMetadata: {
-        onboardingComplete: true,
-      },
-    });
+    const client = await clerkClient();
+    const [updatedUser] = await Promise.all([
+      client.users.updateUser(userId, {
+        publicMetadata: {
+          onboardingComplete: true,
+        },
+      }),
+    ]);
 
-    return { message: res.publicMetadata };
-  } catch (err) {
-    return { error: "There was an error updating the user metadata." };
+    return { message: updatedUser.publicMetadata };
+  } catch (error) {
+    throw new Error(ERROR_MESSAGES.USER.UPDATE_METADATA_FAILED, {
+      cause: error,
+    });
   }
 }
