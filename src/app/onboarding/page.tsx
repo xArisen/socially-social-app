@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button/button";
 import { useOnboardingPage } from "./onboarding.hook";
 
 export default function OnboardingPage() {
-  const { handleSubmit } = useOnboardingPage();
+  const { handleSubmit, isSubmitting } = useOnboardingPage();
 
   return (
     <div className="flex flex-col gap-3">
@@ -16,7 +16,9 @@ export default function OnboardingPage() {
       </p>
       <form action={handleSubmit}>
         {/* TODO: loading for button */}
-        <Button type="submit">Confirm</Button>
+        <Button isLoading={isSubmitting} type="submit">
+          Confirm
+        </Button>
       </form>
     </div>
   );

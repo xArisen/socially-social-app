@@ -1,11 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-// // TODO: Add protected routes and API endpoints protection (and to server actions?)
+// TODO: Add protected routes and API endpoints protection (and to server actions?)
 
-// TODO: Extract all routes to path.ts
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
-const isPublicRoute = createRouteMatcher(["/"]);
+const isPublicRoute = createRouteMatcher(["/", "/about"]);
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { isAuthenticated, sessionClaims } = await auth();
