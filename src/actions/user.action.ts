@@ -10,6 +10,8 @@ import {
   type EmailAddress,
 } from "@clerk/nextjs/server";
 
+// TODO: Add Parallel Routes at some point.
+
 // TODO: Add a global error handler that captures thrown errors and shows a toast by default.
 
 export async function createUser() {
