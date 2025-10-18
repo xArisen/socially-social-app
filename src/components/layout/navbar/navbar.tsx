@@ -1,9 +1,12 @@
 import { paths } from "@/lib/constants";
+import { getAuthenticatedUser } from "@/lib/server/helpers";
 import Link from "next/link";
 import { NavbarDesktop } from "./navbar-desktop";
 import { NavbarMobile } from "./navbar-mobile";
 
-export function Navbar() {
+export async function Navbar() {
+  const authenticatedUser = await getAuthenticatedUser();
+
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="max-w-7xl mx-auto px-4">
@@ -18,7 +21,7 @@ export function Navbar() {
           </div>
 
           <NavbarDesktop />
-          <NavbarMobile />
+          <NavbarMobile authenticatedUser={authenticatedUser} />
         </div>
       </div>
     </nav>

@@ -16,17 +16,17 @@ import {
 
 export async function createUser() {
   const { userId } = await auth();
-  const user = await currentUser();
+  const authUser = await currentUser();
 
   if (isNullable(userId)) {
     throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
 
-  if (isNullable(user)) {
+  if (isNullable(authUser)) {
     throw new Error(ERROR_MESSAGES.AUTH.USER_NOT_FOUND);
   }
 
-  const primaryEmail = user.emailAddresses[0];
+  const primaryEmail = authUser.emailAddresses[0];
 
   if (!isNotEmpty<EmailAddress>(primaryEmail)) {
     throw new Error(ERROR_MESSAGES.AUTH.EMAIL_NOT_FOUND);
@@ -44,10 +44,10 @@ export async function createUser() {
     return await prisma.user.create({
       data: {
         clerkId: userId,
-        name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim(),
-        username: user.username ?? primaryEmail.emailAddress.split("@")[0],
+        name: `${authUser.firstName ?? ""} ${authUser.lastName ?? ""}`.trim(),
+        username: authUser.username ?? primaryEmail.emailAddress.split("@")[0],
         email: primaryEmail.emailAddress,
-        image: user.imageUrl,
+        image: authUser.imageUrl,
       },
     });
   } catch (error) {
@@ -78,4 +78,21 @@ export async function completeUserOnboarding() {
       cause: error,
     });
   }
+}
+
+export async function getUserByClerkId(clerkId: string) {
+  return prisma.user.findUnique({
+    where: {
+      clerkId,
+    },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          posts: true,
+        },
+      },
+    },
+  });
 }

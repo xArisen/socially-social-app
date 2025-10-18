@@ -7,7 +7,7 @@ import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 
 export async function NavbarDesktop() {
-  const user = await currentUser();
+  const authUser = await currentUser();
 
   return (
     <div className="hidden md:flex items-center space-x-4">
@@ -20,7 +20,7 @@ export async function NavbarDesktop() {
         </Link>
       </Button>
 
-      {user ? (
+      {authUser ? (
         <>
           <Button variant="ghost" className="flex items-center gap-2" asChild>
             <Link href={paths.NOTIFICATIONS}>
@@ -32,8 +32,8 @@ export async function NavbarDesktop() {
             <Link
               // TODO: fix import address from paths.ts
               href={`/profile/${
-                user.username ??
-                user.emailAddresses[0].emailAddress.split("@")[0]
+                authUser.username ??
+                authUser.emailAddresses[0].emailAddress.split("@")[0]
               }`}
             >
               <UserIcon className="w-4 h-4" />

@@ -4,5 +4,5 @@ export const paths = {
   ON_BOARDING: "/onboarding",
   ABOUT: "/about",
   NOTIFICATIONS: "/notifications",
-  PROFILE: "/profile",
+  PROFILE: (id: string) => `/profile/${id}`,
 };

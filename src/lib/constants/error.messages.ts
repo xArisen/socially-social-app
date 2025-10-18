@@ -6,6 +6,7 @@ export const ERROR_MESSAGES = {
       "Authenticated user does not have a primary email address.",
   },
   USER: {
+    NOT_FOUND: "Unable to find the requested user profile.",
     CREATE_FAILED: "Unable to create the user profile.",
     UPDATE_METADATA_FAILED: "Unable to update the user metadata.",
   },

@@ -15,7 +15,6 @@ export default function OnboardingPage() {
         labeled &quot;Confirm&quot;.
       </p>
       <form action={handleSubmit}>
-        {/* TODO: loading for button */}
         <Button isLoading={isSubmitting} type="submit">
           Confirm
         </Button>

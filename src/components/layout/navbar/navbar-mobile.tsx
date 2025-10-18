@@ -8,24 +8,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet/sheet";
-import { paths } from "@/lib/constants";
-import { SignInButton, SignOutButton, useAuth } from "@clerk/nextjs";
-import {
-  BellIcon,
-  HomeIcon,
-  LogOutIcon,
-  MenuIcon,
-  MoonIcon,
-  SunIcon,
-  UserIcon,
-} from "lucide-react";
+import { MenuIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 import { useState } from "react";
+import type { NavbarMobileProps } from "./navbar-mobile.types";
+import { NavbarMobileButtons } from "./parts/navbar-mobile-buttons";
 
-export function NavbarMobile() {
+export function NavbarMobile(props: NavbarMobileProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { isSignedIn } = useAuth();
   const { theme, setTheme } = useTheme();
 
   return (
@@ -52,56 +42,7 @@ export function NavbarMobile() {
             <SheetTitle>Menu</SheetTitle>
           </SheetHeader>
           <nav className="flex flex-col space-y-4 mt-6 px-3">
-            <Button
-              variant="ghost"
-              className="flex items-center gap-3 justify-start"
-              asChild
-            >
-              <Link href={paths.HOME}>
-                <HomeIcon className="w-4 h-4" />
-                Home
-              </Link>
-            </Button>
-
-            {isSignedIn ? (
-              <>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-3 justify-start"
-                  asChild
-                >
-                  <Link href={paths.NOTIFICATIONS}>
-                    <BellIcon className="w-4 h-4" />
-                    Notifications
-                  </Link>
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-3 justify-start"
-                  asChild
-                >
-                  <Link href={paths.PROFILE}>
-                    <UserIcon className="w-4 h-4" />
-                    Profile
-                  </Link>
-                </Button>
-                <SignOutButton>
-                  <Button
-                    variant="ghost"
-                    className="flex items-center gap-3 justify-start w-full"
-                  >
-                    <LogOutIcon className="w-4 h-4" />
-                    Logout
-                  </Button>
-                </SignOutButton>
-              </>
-            ) : (
-              <SignInButton mode="modal">
-                <Button variant="default" className="w-full">
-                  Sign In
-                </Button>
-              </SignInButton>
-            )}
+            <NavbarMobileButtons {...props} />
           </nav>
         </SheetContent>
       </Sheet>
