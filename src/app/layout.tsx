@@ -45,7 +45,6 @@ export default function RootLayout({
                 <div className="w-full max-w-screen-xl mx-auto px-4">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div className="hidden lg:block lg:col-span-3">
-                      {/* TODO: check if it is working */}
                       <Suspense fallback={<Loading />}>
                         <Sidebar />
                       </Suspense>

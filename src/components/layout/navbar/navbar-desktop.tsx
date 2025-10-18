@@ -1,13 +1,13 @@
 import { ThemeModeToggleButton } from "@/components/theme/theme-mode-toggle-button";
 import { Button } from "@/components/ui/button/button";
 import { paths } from "@/lib/constants";
+import { getAuthenticatedUser } from "@/lib/server/helpers";
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
 import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 
 export async function NavbarDesktop() {
-  const authUser = await currentUser();
+  const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
   return (
     <div className="hidden md:flex items-center space-x-4">
@@ -20,7 +20,7 @@ export async function NavbarDesktop() {
         </Link>
       </Button>
 
-      {authUser ? (
+      {isUserAuthenticated ? (
         <>
           <Button variant="ghost" className="flex items-center gap-2" asChild>
             <Link href={paths.NOTIFICATIONS}>
@@ -31,10 +31,7 @@ export async function NavbarDesktop() {
           <Button variant="ghost" className="flex items-center gap-2" asChild>
             <Link
               // TODO: fix import address from paths.ts
-              href={`/profile/${
-                authUser.username ??
-                authUser.emailAddresses[0].emailAddress.split("@")[0]
-              }`}
+              href={paths.PROFILE(user.id)}
             >
               <UserIcon className="w-4 h-4" />
               <span className="hidden lg:inline">Profile</span>
