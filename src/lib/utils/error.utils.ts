@@ -2,7 +2,7 @@ import { isNullable } from "./type-guards.utils";
 
 export function getErrorMessage(
   error: unknown,
-  fallbackMessage = "Something went wrong."
+  fallbackMessage = "Something went wrong.",
 ): string {
   if (isNullable(error)) {
     return fallbackMessage;

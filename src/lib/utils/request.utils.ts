@@ -62,7 +62,7 @@ const normaliseArray = (value: unknown[]): unknown[] =>
  * and converting empty values to null. Nested objects are left untouched.
  */
 export function prepareRequestToSend<T extends PlainObject>(
-  payload: T
+  payload: T,
 ): PreparedRequest<T> {
   if (!isPlainObject(payload)) {
     throw new TypeError("Payload must be a plain object");

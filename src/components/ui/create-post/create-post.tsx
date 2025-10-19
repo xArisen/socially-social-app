@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarImage, Button, Textarea } from "@/components";
+import { Avatar, AvatarImage, Button, Textarea } from "@/components/ui";
 import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import { Card, CardContent } from "../card";
 import { useCreatePost } from "./create-post.hook";

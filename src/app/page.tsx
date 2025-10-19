@@ -1,4 +1,4 @@
-import { CreatePost } from "@/components";
+import { CreatePost } from "@/components/ui";
 import { getAuthenticatedUser } from "@/lib/server/helpers";
 
 export default async function HomePage() {

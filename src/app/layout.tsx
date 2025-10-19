@@ -1,4 +1,4 @@
-import { Loading, Sidebar } from "@/components";
+import { Loading, Sidebar } from "@/components/layout";
 import { Navbar } from "@/components/layout/navbar/navbar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";

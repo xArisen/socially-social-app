@@ -5,14 +5,14 @@ export function isNullable(value: unknown): value is null | undefined {
 }
 
 export function isNotNullable<T>(
-  value: T
+  value: T,
 ): value is Exclude<T, null | undefined> {
   return value !== null && value !== undefined;
 }
 
 export function isNotEmpty<T = unknown>(
   value: unknown,
-  typeGuard?: (value: unknown) => value is T
+  typeGuard?: (value: unknown) => value is T,
 ): value is T {
   if (isNullable(value)) {
     return false;
