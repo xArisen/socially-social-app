@@ -27,62 +27,58 @@ export function CreatePost(props: CreatePostProps) {
             </Avatar>
             <Textarea
               placeholder="What's on your mind?"
-              className="min-h-[100px] resize-none border-none focus-visible:ring-0 p-0 text-base"
+              className="min-h-[100px] resize-none border-none focus-visible:ring-0 text-base"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               disabled={isPosting}
             />
-
-            <div className="flex items-center justify-between border-t pt-4">
-              <div className="flex space-x-2">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary"
-                  onClick={() => setShowImageUpload((prev) => !prev)}
-                  disabled={isPosting}
-                >
-                  <ImageIcon className="size-4 mr-2" />
-                  Photo
-                </Button>
-              </div>
-              <Button
-                className="flex items-center"
-                onClick={handleSubmit}
-                disabled={(!content.trim() && !imageUrl) || isPosting}
-              >
-                {isPosting ? (
-                  <>
-                    <Loader2Icon className="size-4 mr-2 animate-spin" />
-                    Posting...
-                  </>
-                ) : (
-                  <>
-                    <SendIcon className="size-4 mr-2" />
-                    Post
-                  </>
-                )}
-              </Button>
-            </div>
           </div>
-          {/* TODO: Handle image uploads */}
-          {/* 
-          {(showImageUpload || imageUrl) && (
+
+          {/* {(showImageUpload || imageUrl) && (
             <div className="border rounded-lg p-4">
               <ImageUpload
                 endpoint="postImage"
                 value={imageUrl}
                 onChange={(url) => {
                   setImageUrl(url);
-                  if (!url) {
-                    setShowImageUpload(false);
-                  }
+                  if (!url) setShowImageUpload(false);
                 }}
               />
             </div>
-          )}
-          */}
+          )} */}
+
+          <div className="flex items-center justify-between border-t pt-4">
+            <div className="flex space-x-2">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-primary"
+                onClick={() => setShowImageUpload((prev) => !prev)}
+                disabled={isPosting}
+              >
+                <ImageIcon className="size-4 mr-2" />
+                Photo
+              </Button>
+            </div>
+            <Button
+              className="flex items-center"
+              onClick={handleSubmit}
+              disabled={(!content.trim() && !imageUrl) || isPosting}
+            >
+              {isPosting ? (
+                <>
+                  <Loader2Icon className="size-4 mr-2 animate-spin" />
+                  Posting...
+                </>
+              ) : (
+                <>
+                  <SendIcon className="size-4 mr-2" />
+                  Post
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
