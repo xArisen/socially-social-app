@@ -1,3 +1,4 @@
+// TODO: Split into multiple files.
 export const ERROR_MESSAGES = {
   AUTH: {
     UNAUTHENTICATED: "You must be signed in to perform this action.",
@@ -9,5 +10,9 @@ export const ERROR_MESSAGES = {
     NOT_FOUND: "Unable to find the requested user profile.",
     CREATE_FAILED: "Unable to create the user profile.",
     UPDATE_METADATA_FAILED: "Unable to update the user metadata.",
+  },
+  POST: {
+    CREATE_FAILED: "Unable to create the post.",
+    CREATE_SUCCESS: "Post created successfully.",
   },
 } as const;
