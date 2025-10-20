@@ -8,11 +8,11 @@ import { useTransition } from "react";
 export function useOnboardingPage() {
   const router = useRouter();
   const { getToken } = useAuth();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startPendingTransition] = useTransition();
 
   // TODO: Consider switching to React Hook Form
   const handleSubmit = () =>
-    startTransition(async () => {
+    startPendingTransition(async () => {
       const res = await completeUserOnboarding();
       if (res?.message) {
         await getToken({ skipCache: true });

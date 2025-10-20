@@ -55,7 +55,7 @@ export function CreatePost(props: CreatePostProps) {
                 size="sm"
                 className="text-muted-foreground hover:text-primary"
                 onClick={() => setShowImageUpload((prev) => !prev)}
-                disabled={isPosting}
+                isLoading={isPosting}
               >
                 <ImageIcon className="size-4 mr-2" />
                 Photo
@@ -64,7 +64,8 @@ export function CreatePost(props: CreatePostProps) {
             <Button
               className="flex items-center"
               onClick={handleSubmit}
-              disabled={(!content.trim() && !imageUrl) || isPosting}
+              isLoading={isPosting}
+              disabled={!content.trim() && !imageUrl}
             >
               {isPosting ? (
                 <>

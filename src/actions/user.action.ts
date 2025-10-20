@@ -1,7 +1,9 @@
 "use server";
 
+import { paths } from "@/lib/constants";
 import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import prisma from "@/lib/prisma";
+import { getAuthenticatedUser } from "@/lib/server/helpers";
 import { isNotEmpty, isNullable } from "@/lib/utils/type-guards.utils";
 import {
   auth,
@@ -9,6 +11,7 @@ import {
   currentUser,
   type EmailAddress,
 } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 // TODO: Add Parallel Routes at some point.
 
@@ -95,4 +98,130 @@ export async function getUserByClerkId(clerkId: string) {
       },
     },
   });
+}
+
+export async function getRecommendedUsers() {
+  const { isUserAuthenticated, user } = await getAuthenticatedUser();
+
+  if (!isUserAuthenticated) {
+    throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
+  }
+
+  try {
+    return await prisma.user.findMany({
+      where: {
+        AND: [
+          { NOT: { id: user.id } },
+          {
+            NOT: {
+              followers: {
+                some: {
+                  followerId: user.id,
+                },
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        _count: {
+          select: {
+            followers: true,
+          },
+        },
+      },
+      take: 3,
+    });
+  } catch (error) {
+    throw new Error(ERROR_MESSAGES.USER.RECOMMENDATIONS_FAILED, {
+      cause: error,
+    });
+  }
+}
+
+async function followUser(targetUserId: string, currentUserId: string) {
+  try {
+    const [followRecord] = await prisma.$transaction([
+      prisma.follows.create({
+        data: {
+          followerId: currentUserId,
+          followingId: targetUserId,
+        },
+      }),
+      prisma.notification.create({
+        data: {
+          type: "FOLLOW",
+          userId: targetUserId,
+          creatorId: currentUserId,
+        },
+      }),
+    ]);
+
+    return followRecord;
+  } catch (error) {
+    throw new Error(ERROR_MESSAGES.USER.FOLLOW_FAILED, { cause: error });
+  }
+}
+
+async function unFollowUser(targetUserId: string, currentUserId: string) {
+  try {
+    return await prisma.follows.delete({
+      where: {
+        followerId_followingId: {
+          followerId: currentUserId,
+          followingId: targetUserId,
+        },
+      },
+    });
+  } catch (error) {
+    throw new Error(ERROR_MESSAGES.USER.UNFOLLOW_FAILED, { cause: error });
+  }
+}
+
+export async function toggleFollow(targetUserId: string) {
+  const { isUserAuthenticated, user: currentUser } =
+    await getAuthenticatedUser();
+
+  if (!isUserAuthenticated) {
+    throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
+  }
+
+  if (targetUserId === currentUser.id) {
+    throw new Error(ERROR_MESSAGES.USER.FOLLOW_SELF_FORBIDDEN);
+  }
+
+  const existingFollow = await prisma.follows.findUnique({
+    where: {
+      followerId_followingId: {
+        followerId: currentUser.id,
+        followingId: targetUserId,
+      },
+    },
+  });
+
+  if (existingFollow) {
+    try {
+      await unFollowUser(targetUserId, currentUser.id);
+      revalidatePath(paths.HOME);
+      return { status: "unfollowed" } as const;
+    } catch (error) {
+      throw new Error(ERROR_MESSAGES.USER.TOGGLE_FOLLOW_FAILED, {
+        cause: error,
+      });
+    }
+  }
+
+  try {
+    await followUser(targetUserId, currentUser.id);
+    revalidatePath(paths.HOME);
+    return { status: "followed" } as const;
+  } catch (error) {
+    throw new Error(ERROR_MESSAGES.USER.TOGGLE_FOLLOW_FAILED, {
+      cause: error,
+    });
+  }
 }

@@ -1,4 +1,4 @@
-import { CreatePost } from "@/components/ui";
+import { CreatePost, WhoToFollow } from "@/components/ui";
 import { getAuthenticatedUser } from "@/lib/server/helpers";
 
 export default async function HomePage() {
@@ -9,7 +9,7 @@ export default async function HomePage() {
         {isUserAuthenticated ? <CreatePost user={user} /> : null}
       </div>
       <div className="hidden lg:block lg:col-span-4 sticky top-20">
-        WhoToFollow
+        <WhoToFollow />
       </div>
     </div>
   );

@@ -7,3 +7,4 @@ export * from "./inputs";
 export * from "./separator";
 export * from "./sheet";
 export * from "./spinner";
+export * from "./who-to-follow";
