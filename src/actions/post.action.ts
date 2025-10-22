@@ -3,15 +3,14 @@
 import { ERROR_MESSAGES, paths } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { getAuthenticatedUser } from "@/lib/server/helpers";
-import type { PreparedRequest } from "@/lib/utils";
+import { prepareRequestToSend } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
-export interface CreatePostPayload extends Record<string, unknown> {
+// TODO: IMPORTANT! Introduce a global server action error handler (logging, mapping, fallback strategy) and plug all actions into it.
+export interface CreatePostRequest extends Record<string, unknown> {
   content: string;
   imageUrl: string;
 }
-
-export type CreatePostRequest = PreparedRequest<CreatePostPayload>;
 
 export async function createPost(request: CreatePostRequest) {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
@@ -20,14 +19,15 @@ export async function createPost(request: CreatePostRequest) {
     throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
 
+  const payload = prepareRequestToSend(request);
+
   let createdPost = null;
 
   try {
     createdPost = await prisma.post.create({
       data: {
+        ...payload,
         authorId: user.id,
-        content: request.content,
-        image: request.imageUrl,
       },
     });
   } catch (error) {
@@ -37,4 +37,49 @@ export async function createPost(request: CreatePostRequest) {
   revalidatePath(paths.HOME);
 
   return createdPost;
+}
+
+export type GetPostsResponse = Awaited<ReturnType<typeof getPosts>>;
+
+export async function getPosts() {
+  return await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      author: {
+        select: {
+          name: true,
+          image: true,
+          username: true,
+        },
+      },
+      comments: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true,
+              image: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+      likes: {
+        select: {
+          userId: true,
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
+    },
+  });
 }

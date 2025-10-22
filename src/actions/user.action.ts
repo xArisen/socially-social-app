@@ -4,7 +4,7 @@ import { paths } from "@/lib/constants";
 import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import prisma from "@/lib/prisma";
 import { getAuthenticatedUser } from "@/lib/server/helpers";
-import type { PreparedRequest } from "@/lib/utils";
+import { prepareRequestToSend } from "@/lib/utils";
 import { isNotEmpty, isNullable } from "@/lib/utils/type-guards.utils";
 import {
   auth,
@@ -15,8 +15,6 @@ import {
 import { revalidatePath } from "next/cache";
 
 // TODO: Add Parallel Routes at some point.
-
-// TODO: Add a global error handler that captures thrown errors and shows a toast by default.
 
 export async function createUser() {
   const { userId } = await auth();
@@ -84,22 +82,16 @@ export async function completeUserOnboarding() {
   }
 }
 
-export interface GetUserByClerkIdPayload extends Record<string, unknown> {
+export interface GetUserByClerkIdRequest extends Record<string, unknown> {
   clerkId: string;
 }
 
-export type GetUserByClerkIdRequest = PreparedRequest<GetUserByClerkIdPayload>;
-
 export async function getUserByClerkId(request: GetUserByClerkIdRequest) {
-  const { clerkId } = request;
-
-  if (isNullable(clerkId)) {
-    return null;
-  }
+  const { clerkId } = prepareRequestToSend(request);
 
   return prisma.user.findUnique({
     where: {
-      clerkId,
+      clerkId: clerkId,
     },
     include: {
       _count: {
@@ -199,11 +191,9 @@ async function unFollowUser(targetUserId: string, currentUserId: string) {
   }
 }
 
-export interface ToggleFollowPayload extends Record<string, unknown> {
+export interface ToggleFollowRequest extends Record<string, unknown> {
   targetUserId: string;
 }
-
-export type ToggleFollowRequest = PreparedRequest<ToggleFollowPayload>;
 
 export async function toggleFollow(request: ToggleFollowRequest) {
   const { isUserAuthenticated, user: currentUser } =
@@ -213,7 +203,7 @@ export async function toggleFollow(request: ToggleFollowRequest) {
     throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
 
-  const { targetUserId } = request;
+  const { targetUserId } = prepareRequestToSend(request);
 
   if (targetUserId === currentUser.id) {
     throw new Error(ERROR_MESSAGES.USER.FOLLOW_SELF_FORBIDDEN);

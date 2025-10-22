@@ -14,6 +14,7 @@
     "format": "prettier . --write && next lint --fix",
     "format-all": "prettier . --write && next lint --fix && pnpm run format:prisma",
     "prisma:generate": "prisma generate",
+    "postinstall": "pnpm run prisma:generate",
     "prisma:push": "prisma db push",
     "prisma:run": "prisma studio"
   },

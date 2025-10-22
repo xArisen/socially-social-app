@@ -4,6 +4,7 @@ export * from "./card";
 export * from "./create-post";
 export * from "./dropdown-menu";
 export * from "./inputs";
+export * from "./post-card";
 export * from "./separator";
 export * from "./sheet";
 export * from "./spinner";
