@@ -4,6 +4,7 @@ import { paths } from "@/lib/constants";
 import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import prisma from "@/lib/prisma";
 import { getAuthenticatedUser } from "@/lib/server/helpers";
+import type { PreparedRequest } from "@/lib/utils";
 import { isNotEmpty, isNullable } from "@/lib/utils/type-guards.utils";
 import {
   auth,
@@ -83,7 +84,19 @@ export async function completeUserOnboarding() {
   }
 }
 
-export async function getUserByClerkId(clerkId: string) {
+export interface GetUserByClerkIdPayload extends Record<string, unknown> {
+  clerkId: string;
+}
+
+export type GetUserByClerkIdRequest = PreparedRequest<GetUserByClerkIdPayload>;
+
+export async function getUserByClerkId(request: GetUserByClerkIdRequest) {
+  const { clerkId } = request;
+
+  if (isNullable(clerkId)) {
+    return null;
+  }
+
   return prisma.user.findUnique({
     where: {
       clerkId,
@@ -143,6 +156,10 @@ export async function getRecommendedUsers() {
   }
 }
 
+export type GetRecommendedUsersResponse = Awaited<
+  ReturnType<typeof getRecommendedUsers>
+>;
+
 async function followUser(targetUserId: string, currentUserId: string) {
   try {
     const [followRecord] = await prisma.$transaction([
@@ -182,13 +199,21 @@ async function unFollowUser(targetUserId: string, currentUserId: string) {
   }
 }
 
-export async function toggleFollow(targetUserId: string) {
+export interface ToggleFollowPayload extends Record<string, unknown> {
+  targetUserId: string;
+}
+
+export type ToggleFollowRequest = PreparedRequest<ToggleFollowPayload>;
+
+export async function toggleFollow(request: ToggleFollowRequest) {
   const { isUserAuthenticated, user: currentUser } =
     await getAuthenticatedUser();
 
   if (!isUserAuthenticated) {
     throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
+
+  const { targetUserId } = request;
 
   if (targetUserId === currentUser.id) {
     throw new Error(ERROR_MESSAGES.USER.FOLLOW_SELF_FORBIDDEN);

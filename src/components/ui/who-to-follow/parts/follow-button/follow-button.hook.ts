@@ -14,7 +14,7 @@ export function useFollowButton(props: FollowButtonHookProps) {
   const handleFollowButton = async () =>
     startLoadingTransition(async () => {
       try {
-        const result = await toggleFollow(userToFollowId);
+        const result = await toggleFollow({ targetUserId: userToFollowId });
         const message =
           result.status === "followed"
             ? ERROR_MESSAGES.USER.FOLLOW_SUCCESS

@@ -4,9 +4,9 @@ type PreparedArray<T> =
   T extends Array<infer U> ? Array<PreparedValue<U>> : never;
 
 type PreparedValue<T> = T extends string
-  ? string | null
+  ? string
   : T extends number
-    ? number | null
+    ? number
     : T extends boolean
       ? boolean
       : T extends Array<unknown>

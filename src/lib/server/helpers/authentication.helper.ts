@@ -18,7 +18,7 @@ export async function getAuthenticatedUser(): Promise<GetAuthenticatedUserResult
     return { isUserAuthenticated: false, user: null };
   }
 
-  const user = await getUserByClerkId(authUser.id);
+  const user = await getUserByClerkId({ clerkId: authUser.id });
   if (isNullable(user)) {
     throw new Error(ERROR_MESSAGES.USER.NOT_FOUND);
   }

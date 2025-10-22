@@ -1,5 +1,6 @@
+import type { GetRecommendedUsersResponse } from "@/actions";
 import { paths } from "@/lib/constants";
-import { isNullable } from "@/lib/utils";
+import { isNotEmpty } from "@/lib/utils";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "../card";
@@ -9,9 +10,10 @@ import { loadWhoToFollow } from "./who-to-follow.loader";
 export async function WhoToFollow() {
   const { recommendedUsers } = await loadWhoToFollow();
 
-  if (isNullable(recommendedUsers)) {
+  if (!isNotEmpty<GetRecommendedUsersResponse>(recommendedUsers)) {
     return null;
   }
+
   return (
     <Card>
       <CardHeader>
