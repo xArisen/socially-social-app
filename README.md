@@ -36,6 +36,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ---
 
+## 🗒️ TODO Conventions
+
+- `TODO: INFO` – contextual notes that explain functionality or how to use a piece of code.
+- `TODO: IMPORTANT` – high-priority follow-ups that should be addressed before shipping.
+- `TODO:` – regular backlog items or nice-to-have improvements.
+
+---
+
 ## Getting Started
 
 First, run the development server:

@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarImage, Button, Textarea } from "@/components/ui";
-import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
+import { ImageIcon, SendIcon } from "lucide-react";
 import { Card, CardContent } from "../card";
 import { useCreatePost } from "./create-post.hook";
 import type { CreatePostProps } from "./create-post.types";
@@ -67,17 +67,8 @@ export function CreatePost(props: CreatePostProps) {
               isLoading={isPosting}
               disabled={!content.trim() && !imageUrl}
             >
-              {isPosting ? (
-                <>
-                  <Loader2Icon className="size-4 mr-2 animate-spin" />
-                  Posting...
-                </>
-              ) : (
-                <>
-                  <SendIcon className="size-4 mr-2" />
-                  Post
-                </>
-              )}
+              <SendIcon className="size-4 mr-2" />
+              Post
             </Button>
           </div>
         </div>
