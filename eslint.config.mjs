@@ -14,6 +14,10 @@ const eslintConfig = [
 ];
 
 eslintConfig.push({
+  ignores: ["src/generated/**"],
+});
+
+eslintConfig.push({
   rules: {
     curly: ["error", "all"],
     "no-restricted-imports": [
