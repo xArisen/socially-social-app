@@ -7,6 +7,7 @@ import { prepareRequestToSend } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
 // TODO: IMPORTANT! Introduce a global server action error handler (logging, mapping, fallback strategy) and plug all actions into it.
+// TODO: IMPORTANT! Hook up react-hook-form for client-side validation and pair it with useActionState-driven server validation flow.
 export interface CreatePostRequest extends Record<string, unknown> {
   content: string;
   imageUrl: string;
@@ -19,7 +20,9 @@ export async function createPost(request: CreatePostRequest) {
     throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
 
-  const payload = prepareRequestToSend(request);
+  const { imageUrl, ...restRequest } = request;
+
+  const payload = prepareRequestToSend({ ...restRequest, image: imageUrl });
 
   let createdPost = null;
 
