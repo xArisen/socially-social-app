@@ -1,5 +1,6 @@
 // TODO: Split into multiple files.
 export const ERROR_MESSAGES = {
+  MESSAGE_LACKING: "Message is lacking for this accident.",
   AUTH: {
     UNAUTHENTICATED: "You must be signed in to perform this action.",
     USER_NOT_FOUND: "Unable to retrieve the current user.",
