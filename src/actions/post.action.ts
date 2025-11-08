@@ -1,12 +1,11 @@
 "use server";
 
-import type { ActionResult } from "@/lib/client/utils";
-import { ERROR_MESSAGES, paths } from "@/lib/constants";
 import prisma from "@/lib/prisma";
-import { getAuthenticatedUser } from "@/lib/server/helpers";
-import { prepareRequestToSend } from "@/lib/utils";
+import { getAuthenticatedUser, mapPrismaError } from "@/lib/server/helpers";
+import type { ActionResult } from "@/lib/types/action.types";
 import { createPostSchema, type CreatePostSchemaType } from "@/schemas/post";
-import { revalidatePath } from "next/cache";
+// TODO: Migrate to Next.js 16.
+import { cacheTag, updateTag } from "next/cache";
 
 // TODO: IMPORTANT! Introduce a global server action error handler (logging, mapping, fallback strategy) and plug all actions into it.
 
@@ -16,10 +15,11 @@ export interface CreatePostRequest extends Record<string, unknown> {
   imageUrl: string;
 }
 
+// TODO: Include prepareRequestToSend? - Think about it.
 export async function createPost(
   data: CreatePostSchemaType
-): Promise<ActionResult<keyof CreatePostSchemaType>> {
-  const { isUserAuthenticated } = await getAuthenticatedUser();
+): Promise<ActionResult> {
+  const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
   if (!isUserAuthenticated) {
     return { ok: false, message: "You must be signed in." };
@@ -27,75 +27,43 @@ export async function createPost(
 
   const parsed = createPostSchema.safeParse(data);
   if (!parsed.success) {
-    const { fieldErrors } = parsed.error.flatten(
-      (issue) => issue.message ?? ERROR_MESSAGES.MESSAGE_LACKING,
-  );
-    const firstNonEmpty = (messages?: string[]) =>
-      messages?.find((message) => message.trim().length > 0);
-
-    return {
-      ok: false,
-      message: "Please correct the highlighted fields.",
-      fieldErrors: {
-        content: firstNonEmpty(fieldErrors.content),
-        imageUrl: firstNonEmpty(fieldErrors.imageUrl),
-      },
-    };
+    // TODO: Extract general notification schemas (copy).
+    return { ok: false, message: "Fix the form fields and try again." };
   }
 
   const { content, imageUrl } = parsed.data;
 
   try {
     await prisma.post.create({
-      data: { content, image: imageUrl, authorId: userId },
-    });
-  } catch {
-    return {
-      ok: false,
-      message: "Failed to create the post. Please try again.",
-    };
-  }
-
-  // Trigger cache invalidation for the post list.
-  revalidatePath("/posts");
-  return { ok: true, message: "Post created successfully." };
-
-  // Alternative (PRG): finish the flow hard-stop:
-  // redirect("/posts?success=1");
-}
-
-export async function createPost(request: CreatePostRequest) {
-  const { isUserAuthenticated, user } = await getAuthenticatedUser();
-
-  if (!isUserAuthenticated) {
-    throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
-  }
-
-  const { imageUrl, ...restRequest } = request;
-
-  const payload = prepareRequestToSend({ ...restRequest, image: imageUrl });
-
-  let createdPost = null;
-
-  try {
-    createdPost = await prisma.post.create({
-      data: {
-        ...payload,
-        authorId: user.id,
-      },
+      data: { content, image: imageUrl, authorId: user.id },
     });
   } catch (error) {
-    throw new Error(ERROR_MESSAGES.POST.CREATE_FAILED, { cause: error });
+    // TODO: Extract this entire try/catch into a utility.
+    console.error("Database error:", error);
+
+    const { errorCode, message } = mapPrismaError(error);
+    const errorId =
+      typeof crypto?.randomUUID === "function"
+        ? crypto.randomUUID()
+        : undefined;
+
+    return { ok: false, message, errorCode, errorId };
   }
 
-  revalidatePath(paths.HOME);
-
-  return createdPost;
+  // TODO: add updating multiple tags - ex. also for user info.
+  updateTag("posts");
+  // TODO: Add router.refresh() or router.redirect in the caller when ok is true.
+  return { ok: true, message: "Post created successfully." };
+  // TODO: Add global action message handling with a toast, allowing selective overrides per case.
 }
 
 export type GetPostsResponse = Awaited<ReturnType<typeof getPosts>>;
 
+// TODO: Fix other functions as createPost.
 export async function getPosts() {
+  "use cache";
+  cacheTag("posts");
+
   return await prisma.post.findMany({
     orderBy: {
       createdAt: "desc",
