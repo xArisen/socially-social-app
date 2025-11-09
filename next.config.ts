@@ -6,7 +6,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  cacheComponents: true,
 };
 
 export default withBundleAnalyzer(nextConfig);

@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { getAuthenticatedUser, mapPrismaError } from "@/lib/server/helpers";
 import type { ActionResult } from "@/lib/types/action.types";
 import { createPostSchema, type CreatePostSchemaType } from "@/schemas/post";
-// TODO: Migrate to Next.js 16.
 import { cacheTag, updateTag } from "next/cache";
 
 // TODO: IMPORTANT! Introduce a global server action error handler (logging, mapping, fallback strategy) and plug all actions into it.
@@ -60,6 +59,7 @@ export async function createPost(
 export type GetPostsResponse = Awaited<ReturnType<typeof getPosts>>;
 
 // TODO: Fix other functions as createPost.
+// TODO: Add pagination and revalidate way of caching.
 export async function getPosts() {
   "use cache";
   cacheTag("posts");
