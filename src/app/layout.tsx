@@ -1,10 +1,8 @@
-import { Loading, Sidebar } from "@/components/layout";
 import { Navbar } from "@/components/layout/navbar/navbar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
@@ -25,8 +23,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  sidebar,
 }: Readonly<{
   children: React.ReactNode;
+  sidebar: React.ReactNode;
 }>) {
   return (
     <ClerkProvider>
@@ -46,9 +46,7 @@ export default function RootLayout({
                 <div className="w-full max-w-screen-xl mx-auto px-4">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div className="hidden lg:block lg:col-span-3">
-                      <Suspense fallback={<Loading />}>
-                        <Sidebar />
-                      </Suspense>
+                      {sidebar}
                     </div>
                     <div className="lg:col-span-9">{children}</div>
                   </div>

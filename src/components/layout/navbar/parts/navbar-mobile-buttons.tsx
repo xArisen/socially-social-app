@@ -53,6 +53,7 @@ export function NavbarMobileButtons(props: NavbarMobileButtonsProps) {
           </SignOutButton>
         </>
       ) : (
+        // TODO: Move the Clerk modal trigger into an @loginModal slot so this button just navigates there.
         <SignInButton mode="modal">
           <Button variant="default" className="w-full">
             Sign In
