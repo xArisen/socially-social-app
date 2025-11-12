@@ -6,6 +6,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  // TODO: IMPORTANT! - Revisit Suspense strategy once the `use cache` (PPR) story is clear.
   cacheComponents: true,
 };
 
