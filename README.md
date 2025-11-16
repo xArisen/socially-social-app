@@ -44,7 +44,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## 📒 Workbench Notes
 
-- Continue reading through the Next 15 → Next 16 migration guide and follow up on any remaining framework changes as soon as the documentation review is complete.
 - Keep rolling out the RHF + Zod setup: finish converting the post actions first, then apply the same pattern across the rest of the application.
 - Carve out the Clerk login modal—and any similar UI—into dedicated parallel-route slots such as `@modal` whenever possible.
 - Review Suspense usage patterns once the `use cache` (PPR) guidance is finalized to ensure our caching strategy remains aligned.
