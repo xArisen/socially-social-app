@@ -5,7 +5,7 @@ import { ERROR_MESSAGES } from "@/lib/constants";
 import { getErrorMessage } from "@/lib/utils";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
-import type { FollowButtonHookProps } from "./follow-button.types";
+import { FollowButtonHookProps } from "./follow-button.types";
 
 export function useFollowButton(props: FollowButtonHookProps) {
   const { userToFollowId } = props;

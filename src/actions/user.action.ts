@@ -10,7 +10,7 @@ import {
   auth,
   clerkClient,
   currentUser,
-  type EmailAddress,
+  EmailAddress,
 } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 

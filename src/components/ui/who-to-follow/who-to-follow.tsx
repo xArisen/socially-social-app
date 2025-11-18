@@ -1,4 +1,4 @@
-import type { GetRecommendedUsersResponse } from "@/actions";
+import { GetRecommendedUsersResponse } from "@/actions";
 import { paths } from "@/lib/constants";
 import { isNotEmpty } from "@/lib/utils";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";

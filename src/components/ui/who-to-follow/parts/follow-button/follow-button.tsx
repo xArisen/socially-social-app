@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui";
 import { useFollowButton } from "./follow-button.hook";
-import type { FollowButtonProps } from "./follow-button.types";
+import { FollowButtonProps } from "./follow-button.types";
 
 export function FollowButton(props: FollowButtonProps) {
   const { isLoading, handleFollowButton } = useFollowButton(props);

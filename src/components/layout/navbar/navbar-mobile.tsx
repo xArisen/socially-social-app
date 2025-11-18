@@ -11,7 +11,7 @@ import {
 import { MenuIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
-import type { NavbarMobileProps } from "./navbar-mobile.types";
+import { NavbarMobileProps } from "./navbar-mobile.types";
 import { NavbarMobileButtons } from "./parts/navbar-mobile-buttons";
 
 export function NavbarMobile(props: NavbarMobileProps) {

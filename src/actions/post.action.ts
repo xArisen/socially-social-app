@@ -2,8 +2,11 @@
 
 import prisma from "@/lib/prisma";
 import { getAuthenticatedUser, mapPrismaError } from "@/lib/server/helpers";
-import type { ActionResult } from "@/lib/types/action.types";
-import { createPostSchema, type CreatePostSchemaType } from "@/schemas/post";
+import { ActionResult } from "@/lib/types/action.types";
+import {
+  createPostSchema,
+  CreatePostSchemaType,
+} from "@/schemas/create-post-schema";
 import { cacheTag, updateTag } from "next/cache";
 
 // TODO: IMPORTANT! Introduce a global server action error handler (logging, mapping, fallback strategy) and plug all actions into it.

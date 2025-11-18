@@ -4,7 +4,7 @@ import { Avatar, AvatarImage, Button, Textarea } from "@/components/ui";
 import { ImageIcon, SendIcon } from "lucide-react";
 import { Card, CardContent } from "../card";
 import { useCreatePost } from "./create-post.hook";
-import type { CreatePostProps } from "./create-post.types";
+import { CreatePostProps } from "./create-post.types";
 
 export function CreatePost(props: CreatePostProps) {
   const { user } = props;

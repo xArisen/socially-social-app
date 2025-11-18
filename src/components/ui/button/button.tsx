@@ -1,5 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
 import * as React from "react";
 
 import { cn } from "@/lib/utils/tailwind.utils";
@@ -33,14 +33,14 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  },
+  }
 );
 
 const renderChildren = (
   children: React.ReactNode,
   asChild: boolean,
   iconOnly: boolean,
-  isLoading?: boolean,
+  isLoading?: boolean
 ) => {
   if (asChild) {
     return children;
