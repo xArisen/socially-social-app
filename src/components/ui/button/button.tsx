@@ -33,14 +33,14 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 const renderChildren = (
   children: React.ReactNode,
   asChild: boolean,
   iconOnly: boolean,
-  isLoading?: boolean
+  isLoading?: boolean,
 ) => {
   if (asChild) {
     return children;

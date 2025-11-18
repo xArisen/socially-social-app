@@ -23,7 +23,7 @@ export const stringSchema = ({
         message: isNotNullable(minLength)
           ? VALIDATION.MESSAGE.MIN.LENGTH(minLength)
           : undefined,
-      }
+      },
     )
     .refine((value) => (isRequired ? isNotEmpty(value) : true), {
       message: VALIDATION.MESSAGE.REQUIRED,

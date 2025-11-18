@@ -19,7 +19,7 @@ export interface CreatePostRequest extends Record<string, unknown> {
 
 // TODO: Include prepareRequestToSend? - Think about it.
 export async function createPost(
-  data: CreatePostSchemaType
+  data: CreatePostSchemaType,
 ): Promise<ActionResult> {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
