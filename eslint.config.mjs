@@ -11,13 +11,11 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "pnpm-lock.yaml",
+      "src/generated/**",
     ],
   },
 ];
-
-eslintConfig.push({
-  ignores: ["src/generated/**"],
-});
 
 eslintConfig.push({
   rules: {
