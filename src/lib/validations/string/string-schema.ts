@@ -8,7 +8,6 @@ export const stringSchema = ({
   minLength,
   maxLength = VALIDATION.LENGTH.DEFAULT_LENGTH,
 }: StringSchemaProps = {}) =>
-  // TODO: NEXT! Consider trimming and sending null for whitespace-only values before persisting to DB.
   z
     .string()
     .max(maxLength, VALIDATION.MESSAGE.MAX.LENGTH(maxLength))

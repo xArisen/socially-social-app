@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getAuthenticatedUser, mapPrismaError } from "@/lib/server/helpers";
 import { ActionResult } from "@/lib/types/action.types";
+import { prepareRequestToSend } from "@/lib/utils";
 import {
   createPostSchema,
   CreatePostSchemaType,
@@ -17,9 +18,8 @@ export interface CreatePostRequest extends Record<string, unknown> {
   imageUrl: string;
 }
 
-// TODO: Include prepareRequestToSend? - Think about it.
 export async function createPost(
-  data: CreatePostSchemaType,
+  data: CreatePostSchemaType
 ): Promise<ActionResult> {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
@@ -33,11 +33,14 @@ export async function createPost(
     return { ok: false, message: "Fix the form fields and try again." };
   }
 
-  const { content, imageUrl } = parsed.data;
+  const preparedData = prepareRequestToSend(parsed.data);
 
   try {
     await prisma.post.create({
-      data: { content, image: imageUrl, authorId: user.id },
+      data: {
+        ...preparedData,
+        authorId: user.id,
+      },
     });
   } catch (error) {
     // TODO: Extract this entire try/catch into a utility.

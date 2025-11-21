@@ -3,15 +3,19 @@ type PlainObject = Record<string, unknown>;
 type PreparedArray<T> =
   T extends Array<infer U> ? Array<PreparedValue<U>> : never;
 
-type PreparedValue<T> = T extends string
-  ? string
-  : T extends number
-    ? number
-    : T extends boolean
-      ? boolean
-      : T extends Array<unknown>
-        ? PreparedArray<T>
-        : T;
+type PreparedValue<T> = T extends null | undefined
+  ? null
+  : T extends string
+    ? string | null
+    : T extends number
+      ? number | null
+      : T extends boolean
+        ? boolean
+        : T extends Array<unknown>
+          ? PreparedArray<T>
+          : T extends PlainObject
+            ? T
+            : never;
 
 export type PreparedRequest<T extends PlainObject> = {
   [K in keyof T]: PreparedValue<T[K]>;
@@ -41,6 +45,10 @@ const normalisePrimitive = (value: unknown) => {
     return value;
   }
 
+  if (typeof value === "object" || typeof value === "function") {
+    throw new TypeError("Unsupported non-plain object; pass a string instead.");
+  }
+
   return null;
 };
 
@@ -58,8 +66,9 @@ const normaliseArray = (value: unknown[]): unknown[] =>
   });
 
 /**
- * Prepares payload data to be sent over the network by trimming primitives
- * and converting empty values to null. Nested objects are left untouched.
+ * Prepares payload data to be sent over the network by trimming primitives,
+ * converting empty values to null, and rejecting non-plain objects (e.g. Date, File, URL).
+ * Nested objects are left untouched.
  */
 export function prepareRequestToSend<T extends PlainObject>(
   payload: T,
