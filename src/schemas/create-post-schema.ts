@@ -7,5 +7,5 @@ export type CreatePostSchemaType = z.infer<typeof createPostSchema>;
 
 export const createPostSchema = z.object({
   content: stringSchema({ isRequired: true }),
-  imageUrl: idSchema({ regex: REGEX.OPTIONAL_URL }),
+  imageUrl: idSchema({ regex: REGEX.OPTIONAL_URL, isRequired: true }),
 });
