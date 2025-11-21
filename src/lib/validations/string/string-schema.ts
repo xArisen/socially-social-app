@@ -7,8 +7,6 @@ export const stringSchema = ({
   isRequired = false,
   minLength,
   maxLength = VALIDATION.LENGTH.DEFAULT_LENGTH,
-  // TODO: Handle regex validation here or extract a dedicated idSchema.
-  regex,
 }: StringSchemaProps = {}) =>
   // TODO: NEXT! Consider trimming and sending null for whitespace-only values before persisting to DB.
   z
@@ -23,7 +21,7 @@ export const stringSchema = ({
         message: isNotNullable(minLength)
           ? VALIDATION.MESSAGE.MIN.LENGTH(minLength)
           : undefined,
-      },
+      }
     )
     .refine((value) => (isRequired ? isNotEmpty(value) : true), {
       message: VALIDATION.MESSAGE.REQUIRED,

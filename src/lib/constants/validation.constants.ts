@@ -7,6 +7,7 @@ function conjugateCharacters(number: number): string {
 export const VALIDATION = {
   MESSAGE: {
     REQUIRED: "This field is required.",
+    PATTERN_MISMATCH: "The value does not match the required pattern.",
     MIN: {
       LENGTH: (min: number): string =>
         `The value must be at least ${conjugateCharacters(min)} long.`,
