@@ -38,7 +38,8 @@ export async function createPost(
   try {
     await prisma.post.create({
       data: {
-        ...preparedData,
+        content: preparedData.content,
+        image: preparedData.imageUrl,
         authorId: user.id,
       },
     });
