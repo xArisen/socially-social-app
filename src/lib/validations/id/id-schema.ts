@@ -1,11 +1,11 @@
 import { REGEX, VALIDATION } from "@/lib/constants";
-import { isNullable, isNotEmpty } from "@/lib/utils";
+import { isNotEmpty, isNullable } from "@/lib/utils";
 import { z } from "zod";
 import { IdSchemaProps } from "./id-schema.types";
 
 export const idSchema = ({
   isRequired = false,
-  regex = REGEX.POSITIVE_NUMBER_OPTIONAL,
+  regex = REGEX.OPTIONAL_POSITIVE_NUMBER,
   maxLength = VALIDATION.LENGTH.DEFAULT_LENGTH,
 }: IdSchemaProps = {}) =>
   z

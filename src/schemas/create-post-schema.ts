@@ -1,16 +1,11 @@
+import { REGEX } from "@/lib/constants";
 import { stringSchema } from "@/lib/validations";
+import { idSchema } from "@/lib/validations/id";
 import { z } from "zod";
 
-// TODO: IMPORTANT! Extract stringSchema, numberSchema, etc.
-// TODO: fix sample validation
-export const createPostSchema = z.object({
-  content: stringSchema(),
-  // TODO: fix imageUrl validation
-  imageUrl: z
-    .string()
-    .url("Invalid URL.")
-    .or(z.literal("").transform(() => undefined))
-    .optional(),
-});
-
 export type CreatePostSchemaType = z.infer<typeof createPostSchema>;
+
+export const createPostSchema = z.object({
+  content: stringSchema({ isRequired: true }),
+  imageUrl: idSchema({ regex: REGEX.OPTIONAL_URL }),
+});
