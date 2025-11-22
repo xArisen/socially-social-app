@@ -2,7 +2,11 @@
 
 import { ERROR_MESSAGES } from "@/lib/constants";
 import prisma from "@/lib/prisma";
-import { getAuthenticatedUser, mapPrismaError } from "@/lib/server/helpers";
+import {
+  getAuthenticatedUser,
+  runActionWithDbHandling,
+  parseServerSchema,
+} from "@/lib/server/helpers";
 import { ActionResult } from "@/lib/types/action.types";
 import { prepareRequestToSend } from "@/lib/utils";
 import {
@@ -28,35 +32,30 @@ export async function createPost(
     return { ok: false, message: ERROR_MESSAGES.AUTH.UNAUTHENTICATED };
   }
 
-  const parsed = createPostSchema.safeParse(data);
-  if (!parsed.success) {
-    return {
-      ok: false,
-      message: ERROR_MESSAGES.SERVER_RESPONSE.FORM_FIELDS_ERRORS,
-    };
+  const validation = parseServerSchema(createPostSchema, data);
+  if (!validation.ok) {
+    return validation.result;
   }
 
-  const preparedData = prepareRequestToSend(parsed.data);
+  const preparedData = prepareRequestToSend(validation.data);
 
-  try {
-    await prisma.post.create({
-      data: {
-        content: preparedData.content,
-        image: preparedData.imageUrl,
-        authorId: user.id,
-      },
-    });
-  } catch (error) {
-    // TODO: Extract this entire try/catch into a utility.
-    console.error(ERROR_MESSAGES.SERVER_RESPONSE.DATABASE_ERROR, error);
+  const creationResult = await runActionWithDbHandling(
+    () =>
+      prisma.post.create({
+        data: {
+          content: preparedData.content,
+          image: preparedData.imageUrl,
+          authorId: user.id,
+        },
+      }),
+    {
+      fallbackMessage:
+        ERROR_MESSAGES.SERVER_RESPONSE.SERVER_ACTION_FAILED("post creation"),
+    }
+  );
 
-    const { errorCode, message } = mapPrismaError(error);
-    const errorId =
-      typeof crypto?.randomUUID === "function"
-        ? crypto.randomUUID()
-        : undefined;
-
-    return { ok: false, message, errorCode, errorId };
+  if (!creationResult.ok) {
+    return creationResult;
   }
 
   // TODO: add updating multiple tags - ex. also for user info.

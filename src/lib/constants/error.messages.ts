@@ -3,7 +3,9 @@ export const ERROR_MESSAGES = {
   MESSAGE_LACKING: "Message is lacking for this accident.",
   SERVER_RESPONSE: {
     FORM_FIELDS_ERRORS: "Fix the form fields and try again.",
-    DATABASE_ERROR: "Database error:",
+    DATABASE_CONSOLE_ERROR: "Database error:",
+    SERVER_ACTION_FAILED: (action: string) =>
+      `Database error during ${action}.`,
   },
   AUTH: {
     UNAUTHENTICATED: "You must be signed in to perform this action.",
@@ -24,7 +26,6 @@ export const ERROR_MESSAGES = {
     FOLLOW_SELF_FORBIDDEN: "You cannot follow yourself.",
   },
   POST: {
-    CREATE_FAILED: "Unable to create the post.",
     CREATE_SUCCESS: "Post created successfully.",
   },
 } as const;
