@@ -1,3 +1,5 @@
 {
-  "cSpell.words": ["cuid"]
+  "cSpell.words": ["cuid"],
+  // TODO: Update prisma to version 7.
+  "prisma.pinToPrisma6": true
 }
