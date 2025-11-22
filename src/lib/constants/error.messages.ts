@@ -1,6 +1,10 @@
 // TODO: Split into multiple files.
 export const ERROR_MESSAGES = {
   MESSAGE_LACKING: "Message is lacking for this accident.",
+  SERVER_RESPONSE: {
+    FORM_FIELDS_ERRORS: "Fix the form fields and try again.",
+    DATABASE_ERROR: "Database error:",
+  },
   AUTH: {
     UNAUTHENTICATED: "You must be signed in to perform this action.",
     USER_NOT_FOUND: "Unable to retrieve the current user.",

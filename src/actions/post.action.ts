@@ -1,5 +1,6 @@
 "use server";
 
+import { ERROR_MESSAGES } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { getAuthenticatedUser, mapPrismaError } from "@/lib/server/helpers";
 import { ActionResult } from "@/lib/types/action.types";
@@ -24,13 +25,15 @@ export async function createPost(
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
   if (!isUserAuthenticated) {
-    return { ok: false, message: "You must be signed in." };
+    return { ok: false, message: ERROR_MESSAGES.AUTH.UNAUTHENTICATED };
   }
 
   const parsed = createPostSchema.safeParse(data);
   if (!parsed.success) {
-    // TODO: Extract general notification schemas (copy).
-    return { ok: false, message: "Fix the form fields and try again." };
+    return {
+      ok: false,
+      message: ERROR_MESSAGES.SERVER_RESPONSE.FORM_FIELDS_ERRORS,
+    };
   }
 
   const preparedData = prepareRequestToSend(parsed.data);
@@ -45,7 +48,7 @@ export async function createPost(
     });
   } catch (error) {
     // TODO: Extract this entire try/catch into a utility.
-    console.error("Database error:", error);
+    console.error(ERROR_MESSAGES.SERVER_RESPONSE.DATABASE_ERROR, error);
 
     const { errorCode, message } = mapPrismaError(error);
     const errorId =
@@ -59,7 +62,7 @@ export async function createPost(
   // TODO: add updating multiple tags - ex. also for user info.
   updateTag("posts");
   // TODO: Add router.refresh() or router.redirect in the caller when ok is true.
-  return { ok: true, message: "Post created successfully." };
+  return { ok: true, message: ERROR_MESSAGES.POST.CREATE_SUCCESS };
   // TODO: Add global action message handling with a toast, allowing selective overrides per case.
 }
 
