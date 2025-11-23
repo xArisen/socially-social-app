@@ -4,8 +4,8 @@ import { ERROR_MESSAGES } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import {
   getAuthenticatedUser,
-  runActionWithDbHandling,
   parseServerSchema,
+  runActionWithDbHandling,
 } from "@/lib/server/helpers";
 import { ActionResult } from "@/lib/types/action.types";
 import { prepareRequestToSend } from "@/lib/utils";
@@ -23,9 +23,13 @@ export interface CreatePostRequest extends Record<string, unknown> {
   imageUrl: string;
 }
 
+export interface CreatePostResponse {
+  postId: string;
+}
+
 export async function createPost(
   data: CreatePostSchemaType
-): Promise<ActionResult> {
+): Promise<ActionResult<CreatePostResponse>> {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
   if (!isUserAuthenticated) {
@@ -40,14 +44,18 @@ export async function createPost(
   const preparedData = prepareRequestToSend(validation.data);
 
   const creationResult = await runActionWithDbHandling(
-    () =>
-      prisma.post.create({
+    async () => {
+      const post = await prisma.post.create({
         data: {
           content: preparedData.content,
           image: preparedData.imageUrl,
           authorId: user.id,
         },
-      }),
+        select: { id: true },
+      });
+
+      return { postId: post.id };
+    },
     {
       fallbackMessage:
         ERROR_MESSAGES.SERVER_RESPONSE.SERVER_ACTION_FAILED("post creation"),
@@ -61,7 +69,11 @@ export async function createPost(
   // TODO: add updating multiple tags - ex. also for user info.
   updateTag("posts");
   // TODO: Add router.refresh() or router.redirect in the caller when ok is true.
-  return { ok: true, message: ERROR_MESSAGES.POST.CREATE_SUCCESS };
+  return {
+    ok: true,
+    message: ERROR_MESSAGES.POST.CREATE_SUCCESS,
+    data: creationResult.data,
+  };
   // TODO: Add global action message handling with a toast, allowing selective overrides per case.
 }
 
