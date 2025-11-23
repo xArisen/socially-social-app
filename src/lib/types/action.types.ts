@@ -4,11 +4,5 @@ export type ActionSuccess<T = void> = {
   message?: string;
 } & (T extends void ? { data?: undefined } : { data: T });
 
-export type ActionFailure = {
-  ok: false;
-  message: string;
-  errorCode?: string;
-  errorId?: string;
-};
-
-export type ActionResult<T = void> = ActionSuccess<T> | ActionFailure;
+// ActionFailure is handled via thrown exceptions; ActionResult models only the success branch.
+export type ActionResult<T = void> = ActionSuccess<T>;

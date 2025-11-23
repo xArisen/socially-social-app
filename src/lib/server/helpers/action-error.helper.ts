@@ -9,7 +9,7 @@ interface RunActionWithDbHandlingOptions {
 
 export async function runActionWithDbHandling<TResult = void>(
   action: () => Promise<TResult>,
-  options: RunActionWithDbHandlingOptions = {}
+  options: RunActionWithDbHandlingOptions = {},
 ): Promise<ActionResult<TResult>> {
   try {
     const data = await action();
@@ -23,16 +23,14 @@ export async function runActionWithDbHandling<TResult = void>(
     console.error(ERROR_MESSAGES.SERVER_RESPONSE.DATABASE_CONSOLE_ERROR, error);
 
     const { errorCode, message } = mapPrismaError(error);
-    const errorId =
-      typeof crypto?.randomUUID === "function"
-        ? crypto.randomUUID()
-        : undefined;
+    const finalMessage =
+      options.fallbackMessage ??
+      message ??
+      ERROR_MESSAGES.SERVER_RESPONSE.SERVER_ACTION_FAILED("database action");
 
-    return {
-      ok: false,
-      message: options.fallbackMessage ?? message,
-      errorCode,
-      errorId,
-    };
+    const dbError = new Error(finalMessage, { cause: error });
+    (dbError as Error & { code?: string }).code = errorCode;
+
+    throw dbError;
   }
 }

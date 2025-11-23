@@ -33,15 +33,12 @@ export async function createPost(
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
   if (!isUserAuthenticated) {
-    return { ok: false, message: ERROR_MESSAGES.AUTH.UNAUTHENTICATED };
+    throw new Error(ERROR_MESSAGES.AUTH.UNAUTHENTICATED);
   }
 
-  const validation = parseServerSchema(createPostSchema, data);
-  if (!validation.ok) {
-    return validation.result;
-  }
-
-  const preparedData = prepareRequestToSend(validation.data);
+  const preparedData = prepareRequestToSend(
+    parseServerSchema(createPostSchema, data)
+  );
 
   const creationResult = await runActionWithDbHandling(
     async () => {
@@ -61,10 +58,6 @@ export async function createPost(
         ERROR_MESSAGES.SERVER_RESPONSE.SERVER_ACTION_FAILED("post creation"),
     }
   );
-
-  if (!creationResult.ok) {
-    return creationResult;
-  }
 
   // TODO: add updating multiple tags - ex. also for user info.
   updateTag("posts");

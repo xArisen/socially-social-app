@@ -24,5 +24,5 @@ export const idSchema = ({
       },
       {
         message: VALIDATION.MESSAGE.PATTERN_MISMATCH,
-      }
+      },
     );

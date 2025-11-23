@@ -1,45 +1,43 @@
 "use client";
 
 import { createPost } from "@/actions/post.action";
-import { ERROR_MESSAGES } from "@/lib/constants";
-import { getErrorMessage } from "@/lib/utils";
-import { useCallback, useState, useTransition } from "react";
-import toast from "react-hot-toast";
+import { useAppForm } from "@/lib/hooks/use-app-form";
+import { createPostSchema } from "@/schemas/create-post-schema";
+import { useState } from "react";
+import { emptyValues } from "./create-post.constants";
 
 export function useCreatePost() {
-  const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [isPosting, setIsPosting] = useTransition();
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const {
+    register,
+    watch,
+    formState: { isSubmitting },
+    onSubmit,
+    // TODO: IMPORTANT! Fix and rename useAppForm. Forbid useForm imports (eslint rule).
+  } = useAppForm({
+    schema: createPostSchema,
+    defaultValues: emptyValues,
+    // TODO: IMPORTANT! Maybe force onSubmit to return value, to not forget to pass it. It will let us pass result, pass deconstructed custom result, or pass null.
+    onSubmit: async (values, form) => {
+      // TODO: IMPORTANT! Add a hook that lets us use actions (e.g., outside a form — at the top of the file) and, when an error is thrown, doesn’t crash the app.
+      const result = await createPost(values);
 
-  const resetForm = useCallback(() => {
-    setContent("");
-    setImageUrl("");
-    setShowImageUpload(false);
-  }, []);
+      form.reset();
+      setShowImageUpload(false);
+      return result;
+    },
+  });
 
-  // TODO: Consider switching to React Hook Form
-  const handleSubmit = () =>
-    setIsPosting(async () => {
-      try {
-        await createPost({
-          content,
-          imageUrl,
-        }).then(() => {
-          resetForm();
-          toast.success(ERROR_MESSAGES.POST.CREATE_SUCCESS);
-        });
-      } catch (error: unknown) {
-        toast.error(getErrorMessage(error));
-      }
-    });
+  const content = watch("content") ?? "";
+  const imageUrl = watch("imageUrl") ?? "";
 
   return {
+    register,
     content,
-    setContent,
     imageUrl,
-    isPosting,
+    isPosting: isSubmitting,
     setShowImageUpload,
-    handleSubmit,
+    showImageUpload,
+    onSubmit,
   };
 }
