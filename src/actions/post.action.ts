@@ -28,7 +28,7 @@ export interface CreatePostResponse {
 }
 
 export async function createPost(
-  data: CreatePostSchemaType
+  data: CreatePostSchemaType,
 ): Promise<ActionResult<CreatePostResponse>> {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
@@ -37,7 +37,7 @@ export async function createPost(
   }
 
   const preparedData = prepareRequestToSend(
-    parseServerSchema(createPostSchema, data)
+    parseServerSchema(createPostSchema, data),
   );
 
   const creationResult = await runActionWithDbHandling(
@@ -56,7 +56,7 @@ export async function createPost(
     {
       fallbackMessage:
         ERROR_MESSAGES.SERVER_RESPONSE.SERVER_ACTION_FAILED("post creation"),
-    }
+    },
   );
 
   // TODO: add updating multiple tags - ex. also for user info.

@@ -1,7 +1,7 @@
 "use client";
 
 import { createPost } from "@/actions/post.action";
-import { useAppForm } from "@/lib/hooks/use-app-form";
+import { useForm } from "@/lib/hooks";
 import { createPostSchema } from "@/schemas/create-post-schema";
 import { useState } from "react";
 import { emptyValues } from "./create-post.constants";
@@ -13,8 +13,7 @@ export function useCreatePost() {
     watch,
     formState: { isSubmitting },
     onSubmit,
-    // TODO: IMPORTANT! Fix and rename useAppForm. Forbid useForm imports (eslint rule).
-  } = useAppForm({
+  } = useForm({
     schema: createPostSchema,
     defaultValues: emptyValues,
     // TODO: IMPORTANT! Maybe force onSubmit to return value, to not forget to pass it. It will let us pass result, pass deconstructed custom result, or pass null.
