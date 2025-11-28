@@ -3,7 +3,7 @@ export * from "./button";
 export * from "./card";
 export * from "./create-post";
 export * from "./dropdown-menu";
-export * from "./inputs";
+export * from "./input-fields";
 export * from "./post-card";
 export * from "./separator";
 export * from "./sheet";

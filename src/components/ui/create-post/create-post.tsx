@@ -1,6 +1,12 @@
 "use client";
 
-import { Avatar, AvatarImage, Button, Textarea } from "@/components/ui";
+import {
+  Avatar,
+  AvatarImage,
+  Button,
+  TextareaField,
+  TextareaVariant,
+} from "@/components/ui";
 import { ImageIcon, SendIcon } from "lucide-react";
 import { Card, CardContent } from "../card";
 import { useCreatePost } from "./create-post.hook";
@@ -8,14 +14,8 @@ import { CreatePostProps } from "./create-post.types";
 
 export function CreatePost(props: CreatePostProps) {
   const { user } = props;
-  const {
-    content,
-    imageUrl,
-    isPosting,
-    setShowImageUpload,
-    onSubmit,
-    register,
-  } = useCreatePost();
+  const { form, content, imageUrl, isPosting, setShowImageUpload, onSubmit } =
+    useCreatePost();
 
   return (
     <Card className="mb-6">
@@ -25,11 +25,13 @@ export function CreatePost(props: CreatePostProps) {
             <Avatar className="w-10 h-10">
               <AvatarImage src={user.image || "/avatar.png"} />
             </Avatar>
-            <Textarea
+            <TextareaField
+              form={form}
+              name="content"
+              ariaLabel="What's on your mind?"
+              variant={TextareaVariant.Fixed}
               placeholder="What's on your mind?"
-              className="min-h-[100px] resize-none border-none focus-visible:ring-0 text-base"
               disabled={isPosting}
-              {...register("content")}
             />
           </div>
 

@@ -8,12 +8,8 @@ import { emptyValues } from "./create-post.constants";
 
 export function useCreatePost() {
   const [showImageUpload, setShowImageUpload] = useState(false);
-  const {
-    register,
-    watch,
-    formState: { isSubmitting },
-    onSubmit,
-  } = useForm({
+
+  const form = useForm({
     schema: createPostSchema,
     defaultValues: emptyValues,
     // TODO: IMPORTANT! Maybe force onSubmit to return value, to not forget to pass it. It will let us pass result, pass deconstructed custom result, or pass null.
@@ -27,16 +23,16 @@ export function useCreatePost() {
     },
   });
 
-  const content = watch("content") ?? "";
-  const imageUrl = watch("imageUrl") ?? "";
+  const content = form.watch("content") ?? "";
+  const imageUrl = form.watch("imageUrl") ?? "";
 
   return {
-    register,
+    form,
     content,
     imageUrl,
-    isPosting: isSubmitting,
+    isPosting: form.formState.isSubmitting,
     setShowImageUpload,
     showImageUpload,
-    onSubmit,
+    onSubmit: form.onSubmit,
   };
 }

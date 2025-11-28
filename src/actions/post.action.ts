@@ -17,7 +17,6 @@ import { cacheTag, updateTag } from "next/cache";
 
 // TODO: IMPORTANT! Introduce a global server action error handler (logging, mapping, fallback strategy) and plug all actions into it.
 
-// TODO: IMPORTANT! Hook up react-hook-form for client-side validation and pair it with useActionState-driven server validation flow.
 export interface CreatePostRequest extends Record<string, unknown> {
   content: string;
   imageUrl: string;
@@ -28,7 +27,7 @@ export interface CreatePostResponse {
 }
 
 export async function createPost(
-  data: CreatePostSchemaType,
+  data: CreatePostSchemaType
 ): Promise<ActionResult<CreatePostResponse>> {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();
 
@@ -37,7 +36,7 @@ export async function createPost(
   }
 
   const preparedData = prepareRequestToSend(
-    parseServerSchema(createPostSchema, data),
+    parseServerSchema(createPostSchema, data)
   );
 
   const creationResult = await runActionWithDbHandling(
@@ -56,18 +55,16 @@ export async function createPost(
     {
       fallbackMessage:
         ERROR_MESSAGES.SERVER_RESPONSE.SERVER_ACTION_FAILED("post creation"),
-    },
+    }
   );
 
   // TODO: add updating multiple tags - ex. also for user info.
   updateTag("posts");
-  // TODO: Add router.refresh() or router.redirect in the caller when ok is true.
   return {
     ok: true,
     message: ERROR_MESSAGES.POST.CREATE_SUCCESS,
     data: creationResult.data,
   };
-  // TODO: Add global action message handling with a toast, allowing selective overrides per case.
 }
 
 export type GetPostsResponse = Awaited<ReturnType<typeof getPosts>>;
