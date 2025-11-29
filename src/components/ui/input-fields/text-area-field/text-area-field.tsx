@@ -3,8 +3,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { Textarea } from "../parts";
-import { InputField, InputFieldAccessibleName } from "../parts/input-field";
+import { InputField, InputFieldAccessibleName, Textarea } from "../parts";
 
 type TextareaFieldProps<TFieldValues extends FieldValues> = Omit<
   React.ComponentProps<typeof Textarea>,
@@ -28,19 +27,27 @@ export function TextareaField<TFieldValues extends FieldValues>({
   id,
   ...textareaProps
 }: TextareaFieldProps<TFieldValues>) {
+  const { required, ...restTextareaProps } = textareaProps;
+  const accessibleNameProps =
+    label !== undefined ? { label, ariaLabel } : { ariaLabel };
+
   return (
     // TODO: Fix input field
     <InputField
       form={form}
       name={name}
-      label={label}
-      ariaLabel={ariaLabel}
       className={wrapperClassName}
       errorClassName={errorClassName}
       id={id}
-    >
-      {/* TODO: Fix Texarea styles */}
-      <Textarea className={cn("min-h-[96px]", className)} {...textareaProps} />
-    </InputField>
+      required={required}
+      {...accessibleNameProps}
+      render={(fieldProps) => (
+        <Textarea
+          className={cn("min-h-[96px]", className)}
+          {...restTextareaProps}
+          {...fieldProps}
+        />
+      )}
+    />
   );
 }

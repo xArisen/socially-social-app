@@ -64,5 +64,6 @@ export function useForm<TSchema extends ZodFormSchema, TResult = void>(
   return {
     ...form,
     onSubmit: handleSubmit,
+    schema,
   };
 }

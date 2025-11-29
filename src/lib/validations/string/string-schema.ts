@@ -7,8 +7,8 @@ export const stringSchema = ({
   isRequired = false,
   minLength,
   maxLength = VALIDATION.LENGTH.DEFAULT_LENGTH,
-}: StringSchemaProps = {}) =>
-  z
+}: StringSchemaProps = {}) => {
+  let schema = z
     .string()
     .max(maxLength, VALIDATION.MESSAGE.MAX.LENGTH(maxLength))
     .refine(
@@ -21,7 +21,15 @@ export const stringSchema = ({
           ? VALIDATION.MESSAGE.MIN.LENGTH(minLength)
           : undefined,
       },
-    )
-    .refine((value) => (isRequired ? isNotEmpty(value) : true), {
-      message: VALIDATION.MESSAGE.REQUIRED,
-    });
+    );
+
+  if (isRequired) {
+    schema = schema
+      .refine((value) => isNotEmpty(value), {
+        message: VALIDATION.MESSAGE.REQUIRED,
+      })
+      .describe("required");
+  }
+
+  return schema;
+};

@@ -1,44 +1,19 @@
 "use client";
 
-import React from "react";
-import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
-
 import { cn, isNotEmpty, isNotNullable } from "@/lib/utils";
+import { Controller, FieldValues } from "react-hook-form";
+import { z } from "zod";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "./field";
-
-export type InputFieldWithLabel = {
-  label: string;
-  ariaLabel?: string;
-};
-
-export type InputFieldAriaOnly = {
-  label?: undefined;
-  ariaLabel: string;
-};
-
-export type InputFieldAccessibleName = InputFieldWithLabel | InputFieldAriaOnly;
-
-type InputFieldProps<TFieldValues extends FieldValues> =
-  InputFieldAccessibleName & {
-    form: UseFormReturn<TFieldValues>;
-    name: Path<TFieldValues>;
-    children: React.ReactElement;
-    description?: React.ReactNode;
-    className?: string;
-    labelClassName?: string;
-    descriptionClassName?: string;
-    errorClassName?: string;
-    id?: string;
-  };
+} from "./field/field";
+import { InputFieldProps } from "./input-field.types";
 
 export function InputField<TFieldValues extends FieldValues>({
-  children,
+  render,
   label,
   ariaLabel,
   form,
@@ -49,8 +24,38 @@ export function InputField<TFieldValues extends FieldValues>({
   errorClassName,
   description,
   id,
+  required,
 }: InputFieldProps<TFieldValues>) {
   const inputId = id ?? name;
+  const labelId = label ? `${inputId}-label` : undefined;
+
+  const unwrapSchema = (schema: z.ZodTypeAny): z.ZodTypeAny => {
+    if (
+      schema instanceof z.ZodOptional ||
+      schema instanceof z.ZodNullable ||
+      schema instanceof z.ZodDefault
+    ) {
+      return unwrapSchema(schema.unwrap() as z.ZodTypeAny);
+    }
+    return schema;
+  };
+
+  const getRequiredFromSchema = (): boolean => {
+    const schema = form.schema;
+    if (!(schema instanceof z.ZodObject)) {
+      return false;
+    }
+
+    const fieldSchema = schema.shape[name as string];
+    if (!fieldSchema) {
+      return false;
+    }
+
+    const baseSchema = unwrapSchema(fieldSchema);
+    return baseSchema.description === "required";
+  };
+
+  const isRequired = required ?? getRequiredFromSchema();
 
   return (
     <Controller
@@ -71,34 +76,34 @@ export function InputField<TFieldValues extends FieldValues>({
           .join(" ");
 
         const hasLabel = isNotNullable(label);
-        const ariaLabelValue = hasLabel
-          ? children.props["aria-label"]
-          : isNotEmpty(ariaLabel)
-            ? ariaLabel
-            : children.props["aria-label"];
+        const ariaLabelValue = hasLabel ? undefined : ariaLabel;
 
-        const child =
-          React.isValidElement(children) && inputId
-            ? React.cloneElement(children, {
-                ...field,
-                id: inputId,
-                "aria-invalid": fieldState.invalid,
-                "aria-describedby": describedBy || undefined,
-                "aria-label": ariaLabelValue,
-                value: field.value ?? "",
-              })
-            : children;
+        const renderedChild = render({
+          ...field,
+          id: inputId,
+          "aria-invalid": fieldState.invalid,
+          "aria-describedby": describedBy || undefined,
+          "aria-labelledby": labelId,
+          // When there's no visual label, fall back to an aria-label for an accessible name.
+          "aria-label": ariaLabelValue,
+          required: isRequired || undefined,
+          value: field.value ?? "",
+        });
 
         return (
           <Field data-invalid={fieldState.invalid} className={className}>
             {label ? (
-              <FieldLabel htmlFor={inputId} className={labelClassName}>
+              <FieldLabel
+                id={labelId}
+                htmlFor={inputId}
+                className={labelClassName}
+              >
                 {label}
               </FieldLabel>
             ) : null}
 
             <FieldContent>
-              {child}
+              {renderedChild}
               {description ? (
                 <FieldDescription
                   id={descriptionId}
