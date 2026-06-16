@@ -1,6 +1,7 @@
 "use client";
 
-import { cn, isNotEmpty, isNotNullable } from "@/lib/utils";
+import { cn } from "@/lib/utils/tailwind.utils";
+import { isNotEmpty, isNotNullable } from "@/lib/utils/type-guards.utils";
 import { Controller, FieldValues } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -10,7 +11,7 @@ import {
   FieldError,
   FieldLabel,
 } from "./field/field";
-import { InputFieldProps } from "./input-field.types";
+import type { InputFieldProps } from "./input-field.types";
 
 export function InputField<TFieldValues extends FieldValues>({
   render,
@@ -29,6 +30,7 @@ export function InputField<TFieldValues extends FieldValues>({
   const inputId = id ?? name;
   const labelId = label ? `${inputId}-label` : undefined;
 
+  // TODO: Cofnij draft commit i wróć do dodawnia automatycznego required i do unwrapSchema.
   const unwrapSchema = (schema: z.ZodTypeAny): z.ZodTypeAny => {
     if (
       schema instanceof z.ZodOptional ||

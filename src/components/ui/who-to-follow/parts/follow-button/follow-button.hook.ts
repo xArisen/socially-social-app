@@ -1,11 +1,11 @@
 "use client";
 
-import { toggleFollow } from "@/actions";
-import { ERROR_MESSAGES } from "@/lib/constants";
-import { getErrorMessage } from "@/lib/utils";
+import { toggleFollow } from "@/actions/user.action";
+import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
+import { getErrorMessage } from "@/lib/utils/error.utils";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
-import { FollowButtonHookProps } from "./follow-button.types";
+import type { FollowButtonHookProps } from "./follow-button.types";
 
 export function useFollowButton(props: FollowButtonHookProps) {
   const { userToFollowId } = props;

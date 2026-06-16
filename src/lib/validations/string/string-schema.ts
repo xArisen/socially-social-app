@@ -1,7 +1,7 @@
-import { VALIDATION } from "@/lib/constants";
-import { isNotEmpty, isNotNullable } from "@/lib/utils";
+import { VALIDATION } from "@/lib/constants/validation.constants";
+import { isNotEmpty, isNotNullable } from "@/lib/utils/type-guards.utils";
 import { z } from "zod";
-import { StringSchemaProps } from "./string-schema.types";
+import type { StringSchemaProps } from "./string-schema.types";
 
 export const stringSchema = ({
   isRequired = false,

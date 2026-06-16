@@ -1,15 +1,14 @@
+import { Avatar, AvatarImage } from "@/components/ui/avatar/avatar";
+import { Button } from "@/components/ui/button/button";
 import {
-  Avatar,
-  AvatarImage,
-  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Separator,
-} from "@/components/ui";
-import { paths } from "@/lib/constants";
-import { getAuthenticatedUser } from "@/lib/server/helpers";
+} from "@/components/ui/card/card";
+import { Separator } from "@/components/ui/separator/separator";
+import { paths } from "@/lib/constants/paths";
+import { getAuthenticatedUser } from "@/lib/server/helpers/authentication.helper";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { LinkIcon, MapPinIcon } from "lucide-react";
 import Link from "next/link";

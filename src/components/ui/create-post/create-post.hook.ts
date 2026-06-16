@@ -1,7 +1,7 @@
 "use client";
 
 import { createPost } from "@/actions/post.action";
-import { useForm } from "@/lib/hooks";
+import { useForm } from "@/lib/hooks/form/form.hook";
 import { createPostSchema } from "@/schemas/create-post-schema";
 import { useState } from "react";
 import { emptyValues } from "./create-post.constants";

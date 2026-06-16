@@ -2,7 +2,7 @@
 
 import { FileSearch } from "lucide-react";
 
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button/button";
 import { useRouter } from "@/lib/client/hooks/router.hook";
 import { paths } from "@/lib/constants/paths";
 

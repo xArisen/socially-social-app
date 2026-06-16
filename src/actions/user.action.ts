@@ -1,10 +1,10 @@
 "use server";
 
-import { paths } from "@/lib/constants";
+import { paths } from "@/lib/constants/paths";
 import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import prisma from "@/lib/prisma";
-import { getAuthenticatedUser } from "@/lib/server/helpers";
-import { prepareRequestToSend } from "@/lib/utils";
+import { getAuthenticatedUser } from "@/lib/server/helpers/authentication.helper";
+import { prepareRequestToSend } from "@/lib/utils/request.utils";
 import { isNotEmpty, isNullable } from "@/lib/utils/type-guards.utils";
 import {
   auth,

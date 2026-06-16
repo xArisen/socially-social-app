@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button/button";
-import { paths } from "@/lib/constants";
+import { paths } from "@/lib/constants/paths";
 import { SignInButton, SignOutButton } from "@clerk/nextjs";
 import { BellIcon, HomeIcon, LogOutIcon, UserIcon } from "lucide-react";
 import Link from "next/link";

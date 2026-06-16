@@ -1,7 +1,7 @@
 "use client";
 
-import { completeUserOnboarding } from "@/actions";
-import { useRouter } from "@/lib/client/hooks";
+import { completeUserOnboarding } from "@/actions/user.action";
+import { useRouter } from "@/lib/client/hooks/router.hook";
 import { useAuth } from "@clerk/nextjs";
 import { useTransition } from "react";
 

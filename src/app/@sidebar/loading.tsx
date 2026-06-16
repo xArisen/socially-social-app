@@ -1,4 +1,4 @@
-import { Loading } from "@/components/layout";
+import { Loading } from "@/components/layout/loading/loading";
 
 export default function SidebarLoading() {
   return <Loading />;

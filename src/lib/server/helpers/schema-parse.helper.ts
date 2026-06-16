@@ -1,4 +1,4 @@
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import { z } from "zod";
 
 export function parseServerSchema<TSchema extends z.ZodTypeAny>(

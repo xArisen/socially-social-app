@@ -1,7 +1,8 @@
-import { REGEX, VALIDATION } from "@/lib/constants";
-import { isNotEmpty, isNullable } from "@/lib/utils";
+import { REGEX } from "@/lib/constants/regex";
+import { VALIDATION } from "@/lib/constants/validation.constants";
+import { isNotEmpty, isNullable } from "@/lib/utils/type-guards.utils";
 import { z } from "zod";
-import { IdSchemaProps } from "./id-schema.types";
+import type { IdSchemaProps } from "./id-schema.types";
 
 export const idSchema = ({
   isRequired = false,

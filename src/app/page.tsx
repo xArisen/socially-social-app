@@ -1,6 +1,8 @@
-import { getPosts } from "@/actions";
-import { CreatePost, PostCard, WhoToFollow } from "@/components/ui";
-import { getAuthenticatedUser } from "@/lib/server/helpers";
+import { getPosts } from "@/actions/post.action";
+import { CreatePost } from "@/components/ui/create-post";
+import { PostCard } from "@/components/ui/post-card";
+import { WhoToFollow } from "@/components/ui/who-to-follow/who-to-follow";
+import { getAuthenticatedUser } from "@/lib/server/helpers/authentication.helper";
 
 export default async function HomePage() {
   const { isUserAuthenticated, user } = await getAuthenticatedUser();

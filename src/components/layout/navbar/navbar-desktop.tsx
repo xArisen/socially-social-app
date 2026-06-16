@@ -1,7 +1,7 @@
 import { ThemeModeToggleButton } from "@/components/theme/theme-mode-toggle-button";
 import { Button } from "@/components/ui/button/button";
-import { paths } from "@/lib/constants";
-import { getAuthenticatedUser } from "@/lib/server/helpers";
+import { paths } from "@/lib/constants/paths";
+import { getAuthenticatedUser } from "@/lib/server/helpers/authentication.helper";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
 import Link from "next/link";

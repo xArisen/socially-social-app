@@ -1,6 +1,6 @@
-import { REGEX } from "@/lib/constants";
-import { stringSchema } from "@/lib/validations";
-import { idSchema } from "@/lib/validations/id";
+import { REGEX } from "@/lib/constants/regex";
+import { idSchema } from "@/lib/validations/id/id-schema";
+import { stringSchema } from "@/lib/validations/string/string-schema";
 import { z } from "zod";
 
 export type CreatePostSchemaType = z.infer<typeof createPostSchema>;

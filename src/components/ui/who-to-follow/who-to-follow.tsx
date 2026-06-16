@@ -1,10 +1,10 @@
-import { GetRecommendedUsersResponse } from "@/actions";
-import { paths } from "@/lib/constants";
-import { isNotEmpty } from "@/lib/utils";
+import type { GetRecommendedUsersResponse } from "@/actions/user.action";
+import { paths } from "@/lib/constants/paths";
+import { isNotEmpty } from "@/lib/utils/type-guards.utils";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "../card";
-import { FollowButton } from "./parts";
+import { Card, CardContent, CardHeader, CardTitle } from "../card/card";
+import { FollowButton } from "./parts/follow-button";
 import { loadWhoToFollow } from "./who-to-follow.loader";
 
 export async function WhoToFollow() {

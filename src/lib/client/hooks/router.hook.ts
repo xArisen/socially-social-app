@@ -4,7 +4,7 @@
 import { useRouter as useRouterLib } from "next/navigation";
 
 import { paths } from "@/lib/constants/paths";
-import { isNotEmpty } from "@/lib/utils";
+import { isNotEmpty } from "@/lib/utils/type-guards.utils";
 
 export const useRouter = () => {
   const router = useRouterLib();

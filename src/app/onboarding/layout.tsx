@@ -1,5 +1,5 @@
-import { createUser } from "@/actions";
-import { paths } from "@/lib/constants";
+import { createUser } from "@/actions/user.action";
+import { paths } from "@/lib/constants/paths";
 import { isNotNullable, isNullable } from "@/lib/utils/type-guards.utils";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

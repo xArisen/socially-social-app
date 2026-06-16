@@ -1,17 +1,15 @@
 "use server";
 
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import prisma from "@/lib/prisma";
-import {
-  getAuthenticatedUser,
-  parseServerSchema,
-  runActionWithDbHandling,
-} from "@/lib/server/helpers";
+import { runActionWithDbHandling } from "@/lib/server/helpers/action-error.helper";
+import { getAuthenticatedUser } from "@/lib/server/helpers/authentication.helper";
+import { parseServerSchema } from "@/lib/server/helpers/schema-parse.helper";
 import { ActionResult } from "@/lib/types/action.types";
-import { prepareRequestToSend } from "@/lib/utils";
+import { prepareRequestToSend } from "@/lib/utils/request.utils";
 import {
   createPostSchema,
-  CreatePostSchemaType,
+  type CreatePostSchemaType,
 } from "@/schemas/create-post-schema";
 import { cacheTag, updateTag } from "next/cache";
 

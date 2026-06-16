@@ -7,7 +7,7 @@ import {
   useForm as useFormLib,
 } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { getErrorMessage } from "../../utils";
+import { getErrorMessage } from "../../utils/error.utils";
 import {
   FormHookProps,
   FormInput,

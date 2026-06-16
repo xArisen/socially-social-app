@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button/button";
 import { useFollowButton } from "./follow-button.hook";
-import { FollowButtonProps } from "./follow-button.types";
+import type { FollowButtonProps } from "./follow-button.types";
 
 export function FollowButton(props: FollowButtonProps) {
   const { isLoading, handleFollowButton } = useFollowButton(props);

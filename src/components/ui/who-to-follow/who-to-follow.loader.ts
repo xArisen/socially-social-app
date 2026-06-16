@@ -1,5 +1,5 @@
-import { getRecommendedUsers } from "@/actions";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { getRecommendedUsers } from "@/actions/user.action";
+import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 
 export async function loadWhoToFollow() {
   try {

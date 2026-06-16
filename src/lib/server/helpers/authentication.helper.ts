@@ -1,5 +1,5 @@
-import { getUserByClerkId } from "@/actions";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { getUserByClerkId } from "@/actions/user.action";
+import { ERROR_MESSAGES } from "@/lib/constants/error.messages";
 import { currentUser } from "@clerk/nextjs/server";
 import { isNullable } from "../../utils/type-guards.utils";
 

@@ -1,5 +1,5 @@
-import { paths } from "@/lib/constants";
-import { getAuthenticatedUser } from "@/lib/server/helpers";
+import { paths } from "@/lib/constants/paths";
+import { getAuthenticatedUser } from "@/lib/server/helpers/authentication.helper";
 import Link from "next/link";
 import { NavbarDesktop } from "./navbar-desktop";
 import { NavbarMobile } from "./navbar-mobile";

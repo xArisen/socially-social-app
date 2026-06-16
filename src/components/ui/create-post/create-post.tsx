@@ -1,16 +1,13 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarImage,
-  Button,
-  TextareaField,
-  TextareaVariant,
-} from "@/components/ui";
+import { Avatar, AvatarImage } from "@/components/ui/avatar/avatar";
+import { Button } from "@/components/ui/button/button";
+import { TextareaField } from "@/components/ui/input-fields/text-area-field/text-area-field";
+import { TextareaVariant } from "@/components/ui/input-fields/parts/text-area/text-area";
 import { ImageIcon, SendIcon } from "lucide-react";
-import { Card, CardContent } from "../card";
+import { Card, CardContent } from "../card/card";
 import { useCreatePost } from "./create-post.hook";
-import { CreatePostProps } from "./create-post.types";
+import type { CreatePostProps } from "./create-post.types";
 
 export function CreatePost(props: CreatePostProps) {
   const { user } = props;

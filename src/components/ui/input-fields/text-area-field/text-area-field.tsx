@@ -1,9 +1,11 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/tailwind.utils";
 import React from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { InputField, InputFieldAccessibleName, Textarea } from "../parts";
+import { InputField } from "../parts/input-field";
+import type { InputFieldAccessibleName } from "../parts/input-field.types";
+import { Textarea } from "../parts/text-area/text-area";
 
 type TextareaFieldProps<TFieldValues extends FieldValues> = Omit<
   React.ComponentProps<typeof Textarea>,

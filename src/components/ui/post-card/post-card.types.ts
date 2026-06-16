@@ -1,4 +1,4 @@
-import { GetPostsResponse } from "@/actions";
+import type { GetPostsResponse } from "@/actions/post.action";
 
 export interface PostCardProps {
   post: GetPostsResponse[number];
