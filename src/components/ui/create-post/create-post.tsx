@@ -2,8 +2,8 @@
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar/avatar";
 import { Button } from "@/components/ui/button/button";
-import { TextareaField } from "@/components/ui/input-fields/text-area-field/text-area-field";
 import { TextareaVariant } from "@/components/ui/input-fields/parts/text-area/text-area";
+import { TextareaField } from "@/components/ui/input-fields/text-area-field/text-area-field";
 import { ImageIcon, SendIcon } from "lucide-react";
 import { Card, CardContent } from "../card/card";
 import { useCreatePost } from "./create-post.hook";
@@ -26,6 +26,7 @@ export function CreatePost(props: CreatePostProps) {
               form={form}
               name="content"
               ariaLabel="What's on your mind?"
+              isRequired
               variant={TextareaVariant.Fixed}
               placeholder="What's on your mind?"
               disabled={isPosting}

@@ -7,7 +7,6 @@ import {
   Path,
   UseFormReturn,
 } from "react-hook-form";
-import { z } from "zod";
 
 export type InputFieldWithLabel = {
   label: string;
@@ -35,9 +34,7 @@ export type InputFieldRenderProps<
 
 export type InputFieldProps<TFieldValues extends FieldValues> =
   InputFieldAccessibleName & {
-    form: UseFormReturn<TFieldValues> & {
-      schema?: z.ZodObject<Record<string, z.ZodTypeAny>>;
-    };
+    form: UseFormReturn<TFieldValues>;
     name: Path<TFieldValues>;
     render: (props: InputFieldRenderProps<TFieldValues>) => React.ReactElement;
     description?: React.ReactNode;
@@ -46,5 +43,5 @@ export type InputFieldProps<TFieldValues extends FieldValues> =
     descriptionClassName?: string;
     errorClassName?: string;
     id?: string;
-    required?: boolean;
+    isRequired?: boolean;
   };

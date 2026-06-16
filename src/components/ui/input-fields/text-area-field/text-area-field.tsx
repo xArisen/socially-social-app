@@ -9,11 +9,12 @@ import { Textarea } from "../parts/text-area/text-area";
 
 type TextareaFieldProps<TFieldValues extends FieldValues> = Omit<
   React.ComponentProps<typeof Textarea>,
-  "name" | "form"
+  "name" | "form" | "required"
 > &
   InputFieldAccessibleName & {
     form: UseFormReturn<TFieldValues>;
     name: Path<TFieldValues>;
+    isRequired?: boolean;
     wrapperClassName?: string;
     errorClassName?: string;
   };
@@ -27,9 +28,9 @@ export function TextareaField<TFieldValues extends FieldValues>({
   errorClassName,
   className,
   id,
+  isRequired,
   ...textareaProps
 }: TextareaFieldProps<TFieldValues>) {
-  const { required, ...restTextareaProps } = textareaProps;
   const accessibleNameProps =
     label !== undefined ? { label, ariaLabel } : { ariaLabel };
 
@@ -41,12 +42,12 @@ export function TextareaField<TFieldValues extends FieldValues>({
       className={wrapperClassName}
       errorClassName={errorClassName}
       id={id}
-      required={required}
+      isRequired={isRequired}
       {...accessibleNameProps}
       render={(fieldProps) => (
         <Textarea
           className={cn("min-h-[96px]", className)}
-          {...restTextareaProps}
+          {...textareaProps}
           {...fieldProps}
         />
       )}

@@ -24,11 +24,9 @@ export const stringSchema = ({
     );
 
   if (isRequired) {
-    schema = schema
-      .refine((value) => isNotEmpty(value), {
-        message: VALIDATION.MESSAGE.REQUIRED,
-      })
-      .describe("required");
+    schema = schema.refine((value) => isNotEmpty(value), {
+      message: VALIDATION.MESSAGE.REQUIRED,
+    });
   }
 
   return schema;
